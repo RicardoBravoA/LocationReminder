@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "reminders")
-data class ReminderDTO(
+data class ReminderEntity(
     @ColumnInfo(name = "title") var title: String?,
     @ColumnInfo(name = "description") var description: String?,
     @ColumnInfo(name = "location") var location: String?,
