@@ -1,6 +1,6 @@
 package com.udacity.location.reminder.app
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.local.LocalDB
 import com.udacity.location.reminder.data.local.RemindersLocalRepository
@@ -11,7 +11,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-class LocationApplication : Application() {
+class LocationApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
