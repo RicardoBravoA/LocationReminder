@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel" />
+            type="com.udacity.location.reminder.save.SaveReminderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
