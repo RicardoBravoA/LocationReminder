@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.udacity.location.reminder.databinding.ActivityReminderDescriptionBinding
+import com.udacity.location.reminder.list.ReminderDataItem
 
 class ReminderDescriptionActivity : AppCompatActivity() {
 
