@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.databinding.FragmentSelectLocationBinding
+import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
