@@ -9,6 +9,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.udacity.location.reminder.BuildConfig
 import com.udacity.location.reminder.R
+import com.udacity.location.reminder.ReminderDescriptionActivity
+import com.udacity.location.reminder.list.ReminderDataItem
 
 private const val NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel"
 
