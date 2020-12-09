@@ -11,7 +11,13 @@
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_MainFragment_to_ReminderListFragment"
-            app:destination="@id/ReminderListFragment" />
+            app:destination="@id/ReminderListFragment"
+            app:enterAnim="@anim/anim_right_in"
+            app:exitAnim="@anim/anim_left_out"
+            app:popEnterAnim="@anim/anim_left_in"
+            app:popExitAnim="@anim/anim_right_out"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -22,6 +28,7 @@
             android:id="@+id/to_save_reminder"
             app:destination="@id/saveReminderFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/saveReminderFragment"
         android:name="com.udacity.location.reminder.save.SaveReminderFragment"
