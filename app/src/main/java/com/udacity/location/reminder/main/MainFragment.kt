@@ -7,15 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.FragmentMainBinding
@@ -26,43 +22,21 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private val viewModel by viewModels<MainViewModel>()
 
-    private lateinit var navController: NavController
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        navController = findNavController()
-
-        observeAuthenticationState()
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    navController.popBackStack(R.id.MainFragment, false)
+        viewModel.authenticationState.observe(viewLifecycleOwner, { authenticationState ->
+            when (authenticationState) {
+                AuthenticationState.AUTHENTICATED -> {
+                    navigateToReminderListFragment()
+                    Log.i("z- user", "autenticado")
                 }
-            }
-        )
-
-        viewModel.authenticationState.observe(viewLifecycleOwner, {
-            when (it) {
-                AuthenticationState.AUTHENTICATED -> navController.popBackStack()
-                AuthenticationState.INVALID_AUTHENTICATION -> Snackbar.make(
-                    view, requireActivity().getString(R.string.app_name),
-                    Snackbar.LENGTH_LONG
-                ).show()
-                else -> Log.e(
-                    "z- error",
-                    "Authentication state that doesn't require any UI change $it"
-                )
+                else -> {
+                    Log.i("z- user", "no autenticado")
+                }
             }
         })
 
@@ -70,6 +44,7 @@ class MainFragment : Fragment() {
             launchSignInFlow()
         }
 
+        return binding.root
     }
 
     private fun launchSignInFlow() {
@@ -100,24 +75,15 @@ class MainFragment : Fragment() {
                     "Successfully signed in user " +
                             "${FirebaseAuth.getInstance().currentUser?.displayName}!"
                 )
+                navigateToReminderListFragment()
             } else {
                 Log.i("z- result", "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
     }
 
-    private fun observeAuthenticationState() {
-
-        viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
-            when (authenticationState) {
-                AuthenticationState.AUTHENTICATED -> {
-                    Log.i("z- user", "autenticado")
-                }
-                else -> {
-                    Log.i("z- user", "no autenticado")
-                }
-            }
-        })
+    private fun navigateToReminderListFragment() {
+        findNavController().navigate(MainFragmentDirections.actionMainFragmentToReminderListFragment())
     }
 
     companion object {

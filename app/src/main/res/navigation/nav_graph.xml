@@ -6,6 +6,15 @@
     app:startDestination="@id/MainFragment">
 
     <fragment
+        android:id="@+id/MainFragment"
+        android:name="com.udacity.location.reminder.main.MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_MainFragment_to_ReminderListFragment"
+            app:destination="@id/ReminderListFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/ReminderListFragment"
         android:name="com.udacity.location.reminder.list.ReminderListFragment"
         android:label="ReminderListFragment">
@@ -28,15 +37,6 @@
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.location.reminder.save.select.SelectLocationFragment"
         android:label="Select Location" />
-
-    <fragment
-        android:id="@+id/MainFragment"
-        android:name="com.udacity.location.reminder.main.MainFragment"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_MainFragment_to_ReminderListFragment"
-            app:destination="@id/ReminderListFragment" />
-    </fragment>
 
 </navigation>
 
