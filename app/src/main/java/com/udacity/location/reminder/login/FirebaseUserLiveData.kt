@@ -1,4 +1,4 @@
-package com.udacity.location.reminder.authentication
+package com.udacity.location.reminder.login
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reminderListFragment">
+    app:startDestination="@id/MainFragment">
 
     <fragment
         android:id="@+id/reminderListFragment"
@@ -31,9 +32,17 @@
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.location.reminder.save.select.SelectLocationFragment"
         android:label="Select Location" />
+
     <fragment
+        android:id="@+id/MainFragment"
+        android:name="com.udacity.location.reminder.main.MainFragment"
+        tools:layout="@layout/fragment_main" />
+
+</navigation>
+
+    <!--<fragment
         android:id="@+id/FirstFragment"
-        android:name="com.udacity.location.reminder.FirstFragment"
+        android:name="com.udacity.location.reminder.main.MainFragment"
         tools:layout="@layout/fragment_first"
         android:label="@string/first_fragment_label">
 
@@ -43,13 +52,11 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.udacity.location.reminder.SecondFragment"
+        android:name="com.udacity.location.reminder.login.LoginFragment"
         tools:layout="@layout/fragment_second"
         android:label="@string/second_fragment_label">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
-    </fragment>
-
-</navigation>
+    </fragment>-->
