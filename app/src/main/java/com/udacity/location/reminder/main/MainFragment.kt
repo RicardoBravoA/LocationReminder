@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
@@ -39,6 +40,8 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
+
+        observeAuthenticationState()
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -75,10 +78,12 @@ class MainFragment : Fragment() {
         )
 
         startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder()
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setLogo(R.drawable.map)
                 .setTheme(R.style.Theme_LocationReminder)
+                .setIsSmartLockEnabled(true)
                 .build(),
             SIGN_IN_RESULT_CODE
         )
@@ -99,6 +104,20 @@ class MainFragment : Fragment() {
                 Log.i("z- result", "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
+    }
+
+    private fun observeAuthenticationState() {
+
+        viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
+            when (authenticationState) {
+                AuthenticationState.AUTHENTICATED -> {
+                    Log.i("z- user", "autenticado")
+                }
+                else -> {
+                    Log.i("z- user", "no autenticado")
+                }
+            }
+        })
     }
 
     companion object {
