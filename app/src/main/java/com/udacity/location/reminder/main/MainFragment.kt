@@ -40,16 +40,13 @@ class MainFragment : Fragment() {
 
         navController = findNavController()
 
-        val callback: OnBackPressedCallback = object : OnBackPressedCallback(
-            true
-        ) {
-            override fun handleOnBackPressed() {
-                navController.popBackStack(R.id.MainFragment, false)
-            }
-        }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
-            callback
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navController.popBackStack(R.id.MainFragment, false)
+                }
+            }
         )
 
         viewModel.authenticationState.observe(viewLifecycleOwner, {
@@ -73,18 +70,17 @@ class MainFragment : Fragment() {
     }
 
     private fun launchSignInFlow() {
-        // Give users the option to sign in / register with their email or Google account. If users
-        // choose to register with their email, they will need to create a password as well.
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
-        // Create and launch sign-in intent. We listen to the response of this activity with the
-        // SIGN_IN_RESULT_CODE code.
         startActivityForResult(
-            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
-                providers
-            ).build(), SIGN_IN_RESULT_CODE
+            AuthUI.getInstance().createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.map)
+                .setTheme(R.style.Theme_LocationReminder)
+                .build(),
+            SIGN_IN_RESULT_CODE
         )
     }
 
@@ -100,9 +96,6 @@ class MainFragment : Fragment() {
                             "${FirebaseAuth.getInstance().currentUser?.displayName}!"
                 )
             } else {
-                // Sign in failed. If response is null the user canceled the sign-in flow using
-                // the back button. Otherwise check response.getError().getErrorCode() and handle
-                // the error.
                 Log.i("z- result", "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
