@@ -3,7 +3,6 @@ package com.udacity.location.reminder.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.FragmentMainBinding
 import com.udacity.location.reminder.login.AuthenticationState
@@ -29,14 +27,8 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(inflater)
 
         viewModel.authenticationState.observe(viewLifecycleOwner, { authenticationState ->
-            when (authenticationState) {
-                AuthenticationState.AUTHENTICATED -> {
-                    navigateToReminderListFragment()
-                    Log.i("z- user", "autenticado")
-                }
-                else -> {
-                    Log.i("z- user", "no autenticado")
-                }
+            if (authenticationState == AuthenticationState.AUTHENTICATED) {
+                navigateToReminderListFragment()
             }
         })
 
@@ -69,15 +61,7 @@ class MainFragment : Fragment() {
         if (requestCode == SIGN_IN_RESULT_CODE) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in user.
-                Log.i(
-                    "z- result",
-                    "Successfully signed in user " +
-                            "${FirebaseAuth.getInstance().currentUser?.displayName}!"
-                )
                 navigateToReminderListFragment()
-            } else {
-                Log.i("z- result", "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
     }
