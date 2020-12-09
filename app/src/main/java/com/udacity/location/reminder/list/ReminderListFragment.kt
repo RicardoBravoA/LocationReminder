@@ -1,7 +1,12 @@
 package com.udacity.location.reminder.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.NonNull
+import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
@@ -10,6 +15,7 @@ import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import com.udacity.location.reminder.util.setTitle
 import com.udacity.location.reminder.util.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class ReminderListFragment : BaseFragment() {
 
@@ -67,7 +73,9 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-//                TODO: add the logout implementation
+                AuthUI.getInstance()
+                    .signOut(requireContext())
+                    .addOnCompleteListener {  }
             }
         }
         return super.onOptionsItemSelected(item)
