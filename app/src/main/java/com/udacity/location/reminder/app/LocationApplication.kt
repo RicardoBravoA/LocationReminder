@@ -5,6 +5,7 @@ import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.local.LocalDB
 import com.udacity.location.reminder.data.local.RemindersLocalRepository
 import com.udacity.location.reminder.list.RemindersListViewModel
+import com.udacity.location.reminder.main.MainViewModel
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,6 +23,9 @@ class LocationApplication : MultiDexApplication() {
         val myModule = module {
             //Declare a ViewModel - be later inject into Fragment with dedicated injector using by viewModel()
             viewModel {
+                MainViewModel(get())
+            }
+            viewModel {
                 RemindersListViewModel(
                     get(),
                     get() as ReminderDataSource
@@ -35,6 +39,12 @@ class LocationApplication : MultiDexApplication() {
                     get() as ReminderDataSource
                 )
             }
+            /*single {
+                //This view model is declared singleton to be used across multiple fragments
+                MainViewModel(
+                    get()
+                )
+            }*/
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(this@LocationApplication) }
         }

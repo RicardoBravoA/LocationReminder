@@ -2,7 +2,6 @@ package com.udacity.location.reminder.list
 
 import android.os.Bundle
 import android.view.*
-import androidx.databinding.DataBindingUtil
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
@@ -13,18 +12,15 @@ import com.udacity.location.reminder.util.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReminderListFragment : BaseFragment() {
-    //use Koin to retrieve the ViewModel instance
+
     override val viewModel: RemindersListViewModel by viewModel()
     private lateinit var binding: FragmentRemindersBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_reminders, container, false
-            )
+        binding = FragmentRemindersBinding.inflate(inflater)
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
