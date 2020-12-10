@@ -10,7 +10,10 @@ import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.databinding.FragmentSaveReminderBinding
+import com.udacity.location.reminder.util.CustomTextWatcher
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
+import com.udacity.location.reminder.util.showErrorMessageInputLayout
+import com.udacity.location.reminder.util.validateErrorInputLayout
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
@@ -42,6 +45,11 @@ class SaveReminderFragment : BaseFragment() {
 //            TODO: use the user entered reminder details to:
 //             1) add a geofencing request
 //             2) save the reminder to the local db
+
+            viewModel.validateData(
+                binding.titleEditText.text.toString(),
+                binding.descriptionEditText.text.toString()
+            )
         }
 
         viewModel.selectedPOI.observe(viewLifecycleOwner, { singleEvent ->
@@ -61,6 +69,21 @@ class SaveReminderFragment : BaseFragment() {
                 binding.descriptionEditText.setText(it)
             }
         })
+
+        viewModel.validateTitle.observe(viewLifecycleOwner, { isValid ->
+            if (!isValid) {
+                binding.titleTextInputLayout.showErrorMessageInputLayout(
+                    getString(R.string.reminder_title_error)
+                )
+            }
+        })
+
+        binding.titleEditText.addTextChangedListener(CustomTextWatcher(
+            onChanged = { _, _, _, _ ->
+                binding.titleTextInputLayout.validateErrorInputLayout()
+                viewModel.validateTitleWatcher()
+            }
+        ))
 
         return binding.root
     }

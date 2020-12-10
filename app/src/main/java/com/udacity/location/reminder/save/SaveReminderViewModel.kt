@@ -1,6 +1,7 @@
 package com.udacity.location.reminder.save
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,18 @@ import kotlinx.coroutines.launch
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
 
+    private val _validateTitle = MutableLiveData<Boolean>()
+    val validateTitle: LiveData<Boolean>
+        get() = _validateTitle
+
+    private val _validateDescription = MutableLiveData<Boolean>()
+    val validateDescription: LiveData<Boolean>
+        get() = _validateDescription
+
+    private val _validateData = MutableLiveData<SingleEvent<Boolean>>()
+    val validateData: LiveData<SingleEvent<Boolean>>
+        get() = _validateData
+
     private val _reminderTitle = MutableLiveData<SingleEvent<String?>?>()
     val reminderTitle: LiveData<SingleEvent<String?>?>
         get() = _reminderTitle
@@ -31,6 +44,25 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
 
     fun addSelectedPOI(poi: PointOfInterest?) {
         _selectedPOI.value = SingleEvent(poi)
+    }
+
+    fun validateData(title: String, description: String) {
+        validateTitle(title)
+        validateDescription(description)
+        _validateData.value = SingleEvent(_validateTitle.value!! && _validateDescription.value!!)
+    }
+
+    private fun validateTitle(value: String) {
+        _validateTitle.value = !TextUtils.isEmpty(value)
+    }
+
+    private fun validateDescription(value: String) {
+        _validateDescription.value = !TextUtils.isEmpty(value)
+    }
+
+    // For TextWatcher
+    fun validateTitleWatcher() {
+        _validateTitle.value = true
     }
 
     /**
