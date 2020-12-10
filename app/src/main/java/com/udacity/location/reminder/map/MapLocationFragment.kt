@@ -1,8 +1,8 @@
 package com.udacity.location.reminder.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
@@ -10,7 +10,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.R
+import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
+import com.udacity.location.reminder.main.MainFragmentDirections
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -97,7 +99,6 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
     }
 
     override fun onPoiClick(poi: PointOfInterest?) {
-        Log.i("z- poi", "true")
         val poiMarker = map?.addMarker(
             marker(
                 poi?.latLng!!,
@@ -105,6 +106,10 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
             )
         )
         poiMarker?.showInfoWindow()
+        viewModel.selectedPOI.value = poi
+
+        findNavController().popBackStack()
+
     }
 
 }
