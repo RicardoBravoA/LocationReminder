@@ -95,6 +95,10 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
             map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
+        android.R.id.home -> {
+            back()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -108,8 +112,11 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
         poiMarker?.showInfoWindow()
         viewModel.selectedPOI.value = poi
 
-        findNavController().popBackStack()
+        back()
+    }
 
+    private fun back() {
+        findNavController().popBackStack()
     }
 
 }
