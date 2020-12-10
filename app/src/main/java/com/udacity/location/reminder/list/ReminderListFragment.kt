@@ -25,6 +25,7 @@ class ReminderListFragment : BaseFragment() {
     ): View? {
         binding = FragmentRemindersBinding.inflate(inflater)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(false)
@@ -37,7 +38,6 @@ class ReminderListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
         setupRecyclerView()
 
         binding.addButton.setOnClickListener {

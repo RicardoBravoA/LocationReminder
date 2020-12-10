@@ -96,7 +96,7 @@ dependencies {
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:rules:$androidXTestRulesVersion"
 
-    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
