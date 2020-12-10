@@ -2,7 +2,9 @@ package com.udacity.location.reminder.map
 
 import android.os.Bundle
 import android.view.*
-import androidx.databinding.DataBindingUtil
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
@@ -10,24 +12,31 @@ import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class MapLocationFragment : BaseFragment() {
+class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentMapLocationBinding
 
+    private lateinit var map: GoogleMap
+    private val REQUEST_LOCATION_PERMISSION = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_map_location, container, false)
+        binding = FragmentMapLocationBinding.inflate(inflater)
 
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-//        TODO: add the map setup implementation
+        (requireActivity().supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)?.let {
+            it.getMapAsync(this)
+        }
+
+//        mapFragment.getMapAsync(this)
+
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
@@ -37,6 +46,10 @@ class MapLocationFragment : BaseFragment() {
         onLocationSelected()
 
         return binding.root
+    }
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+
     }
 
     private fun onLocationSelected() {

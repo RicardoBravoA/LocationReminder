@@ -25,6 +25,7 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentMainBinding.inflate(inflater)
+        binding.lifecycleOwner = this
 
         viewModel.authenticationState.observe(viewLifecycleOwner, { authenticationState ->
             if (authenticationState == AuthenticationState.AUTHENTICATED) {
