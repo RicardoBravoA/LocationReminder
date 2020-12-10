@@ -5,7 +5,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
-import com.udacity.location.reminder.databinding.FragmentSelectLocationBinding
+import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -14,15 +14,14 @@ class MapLocationFragment : BaseFragment() {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
-    private lateinit var binding: FragmentSelectLocationBinding
+    private lateinit var binding: FragmentMapLocationBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_map_location, container, false)
 
-        binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true)
