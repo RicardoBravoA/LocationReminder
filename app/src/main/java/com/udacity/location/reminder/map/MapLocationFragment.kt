@@ -1,8 +1,12 @@
 package com.udacity.location.reminder.map
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -63,6 +67,7 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
         map.uiSettings.isZoomControlsEnabled = true
 
         setMapStyle(map)
+        enableMyLocation()
     }
 
     private fun onLocationSelected() {
@@ -106,6 +111,35 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun enableMyLocation() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) -> map.isMyLocationEnabled = true
+            else -> {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION_PERMISSION
+                )
+            }
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                enableMyLocation()
+            }
+        }
     }
 
 }
