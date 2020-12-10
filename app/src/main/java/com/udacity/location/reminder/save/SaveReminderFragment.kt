@@ -1,7 +1,6 @@
 package com.udacity.location.reminder.save
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,7 @@ import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.databinding.FragmentSaveReminderBinding
-import com.udacity.location.reminder.util.CustomTextWatcher
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
-import com.udacity.location.reminder.util.showErrorMessageInputLayout
-import com.udacity.location.reminder.util.validateErrorInputLayout
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
@@ -52,6 +48,7 @@ class SaveReminderFragment : BaseFragment() {
             )
         }
 
+        // Show data
         viewModel.selectedPOI.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent?.getContentIfNotHandled()?.let {
                 binding.selectedLocationTextView.text = it.name
@@ -69,37 +66,6 @@ class SaveReminderFragment : BaseFragment() {
                 binding.descriptionEditText.setText(it)
             }
         })
-
-        //Validate error messages
-        viewModel.validateTitle.observe(viewLifecycleOwner, { isValid ->
-            if (!isValid) {
-                binding.titleTextInputLayout.showErrorMessageInputLayout(
-                    getString(R.string.reminder_title_error)
-                )
-            }
-        })
-
-        binding.titleEditText.addTextChangedListener(CustomTextWatcher(
-            onChanged = { _, _, _, _ ->
-                binding.titleTextInputLayout.validateErrorInputLayout()
-                viewModel.validateTitleWatcher()
-            }
-        ))
-
-        viewModel.validateDescription.observe(viewLifecycleOwner, { isValid ->
-            if (!isValid) {
-                binding.descriptionTextInputLayout.showErrorMessageInputLayout(
-                    getString(R.string.reminder_description_error)
-                )
-            }
-        })
-
-        binding.descriptionEditText.addTextChangedListener(CustomTextWatcher(
-            onChanged = { _, _, _, _ ->
-                binding.descriptionTextInputLayout.validateErrorInputLayout()
-                viewModel.validateDescriptionWatcher()
-            }
-        ))
 
         return binding.root
     }

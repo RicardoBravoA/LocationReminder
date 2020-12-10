@@ -16,48 +16,30 @@
         android:background="@color/white"
         android:padding="@dimen/margin_normal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/title_text_input_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <EditText
+            android:id="@+id/title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
+            android:hint="@string/reminder_title"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/title_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/reminder_title"
-                android:imeOptions="actionNext"
-                android:inputType="textCapWords" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/description_text_input_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <EditText
+            android:id="@+id/description_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4"
-            app:errorEnabled="true"
+            android:gravity="start"
+            android:hint="@string/reminder_desc"
+            android:imeOptions="actionNext"
+            android:inputType="textMultiLine"
+            android:lines="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_text_input_layout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/description_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:hint="@string/reminder_desc"
-                android:imeOptions="actionNext"
-                android:inputType="textMultiLine"
-                android:lines="10" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/title_edit_text" />
 
         <TextView
             android:id="@+id/select_location_text_view"
@@ -72,7 +54,7 @@
             android:textColor="@color/black"
             app:drawableStartCompat="@drawable/ic_location"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_text_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/description_edit_text" />
 
         <TextView
             android:id="@+id/selected_location_text_view"
