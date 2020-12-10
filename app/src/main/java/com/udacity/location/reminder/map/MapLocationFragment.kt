@@ -35,7 +35,6 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
             it.getMapAsync(this)
         }
 
-//        mapFragment.getMapAsync(this)
 
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
