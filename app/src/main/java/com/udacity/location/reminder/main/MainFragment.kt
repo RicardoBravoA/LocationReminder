@@ -13,7 +13,6 @@ import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.databinding.FragmentMainBinding
-import com.udacity.location.reminder.login.AuthenticationState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : BaseFragment() {

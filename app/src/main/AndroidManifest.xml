@@ -31,10 +31,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".login.AuthenticationActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.LocationReminder.NoActionBar" />
-        <activity
             android:name=".ReminderDescriptionActivity"
             android:theme="@style/Theme.LocationReminder.NoActionBar" />
 
