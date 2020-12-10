@@ -1,10 +1,15 @@
 package com.udacity.location.reminder.map
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
@@ -31,13 +36,11 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-        (requireActivity().supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)?.let {
-            it.getMapAsync(this)
-        }
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
 
 //        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
 
 
@@ -47,8 +50,19 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
 
+        val latitude = 37.422160
+        val longitude = -122.084270
+        val zoomLevel = 15f
+
+        val homeLatLng = LatLng(latitude, longitude)
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
+        map.addMarker(MarkerOptions().position(homeLatLng))
+        map.uiSettings.isZoomControlsEnabled = true
+
+        setMapStyle(map)
     }
 
     private fun onLocationSelected() {
@@ -57,6 +71,18 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
         //         and navigate back to the previous fragment to save the reminder and add the geofence
     }
 
+    private fun setMapStyle(map: GoogleMap) {
+        try {
+            map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.map_style
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            e.printStackTrace()
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
