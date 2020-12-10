@@ -35,12 +35,12 @@
             android:theme="@style/Theme.LocationReminder.NoActionBar" />
 
         <receiver
-            android:name=".geofence.GeofenceBroadcastReceiver"
+            android:name=".receiver.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name=".geofence.GeofenceTransitionsJobIntentService"
+            android:name=".receiver.GeofenceTransitionsJobIntentService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>

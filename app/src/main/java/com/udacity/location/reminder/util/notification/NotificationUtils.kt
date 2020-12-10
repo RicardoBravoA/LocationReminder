@@ -1,4 +1,4 @@
-package com.udacity.location.reminder.util
+package com.udacity.location.reminder.util.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -35,10 +35,7 @@ fun createChannel(context: Context) {
     }
 }
 
-fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
-    val notificationManager = context
-        .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+fun NotificationManager.sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
     val intent = ReminderDescriptionActivity.newIntent(context.applicationContext, reminderDataItem)
 
     //create a pending intent that opens ReminderDescriptionActivity when the user clicks on the notification
@@ -58,7 +55,7 @@ fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
         .setAutoCancel(true)
         .build()
 
-    notificationManager.notify(NOTIFICATION_ID, notification)
+    notify(NOTIFICATION_ID, notification)
 }
 
 private const val CHANNEL_ID = "GeofenceChannel"
