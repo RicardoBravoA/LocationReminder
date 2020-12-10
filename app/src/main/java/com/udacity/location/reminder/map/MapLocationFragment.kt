@@ -1,4 +1,4 @@
-package com.udacity.location.reminder.save.select
+package com.udacity.location.reminder.map
 
 import android.os.Bundle
 import android.view.*
@@ -10,7 +10,7 @@ import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class SelectLocationFragment : BaseFragment() {
+class MapLocationFragment : BaseFragment() {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
