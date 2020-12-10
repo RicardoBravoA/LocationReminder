@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
+import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.databinding.FragmentMainBinding
 import com.udacity.location.reminder.login.AuthenticationState
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -70,7 +70,11 @@ class MainFragment : BaseFragment() {
     }
 
     private fun navigateToReminderListFragment() {
-        findNavController().navigate(MainFragmentDirections.actionMainFragmentToReminderListFragment())
+        viewModel.navigationCommand.postValue(
+            NavigationCommand.To(
+                MainFragmentDirections.actionMainFragmentToReminderListFragment()
+            )
+        )
     }
 
     companion object {
