@@ -32,6 +32,7 @@
     <string name="select_location">Please select location</string>
     <string name="geofences_not_added">Problem in adding geofences.</string>
     <string name="welcome">Welcome</string>
+    <string name="googleplex">Googleplex</string>
     <string name="err_enter_title">Please enter title</string>
     <string name="err_select_location">Please select location</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDhoLTzaJFRRHB8vu329noA1AeiaHX-oOI</string>

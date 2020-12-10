@@ -17,9 +17,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.util.Constant
@@ -63,7 +61,7 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         GpsUtil(requireContext()).turnOnGPS(object : GpsUtil.GpsListener {
             override fun onGpsStatus(isGPSEnable: Boolean) {
                 if (isGPSEnable) {
-                    validateUbication()
+                    validateLocation()
                 }
             }
         })
@@ -84,9 +82,16 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         val longitude = -122.084270
         val zoomLevel = 15f
 
-        val homeLatLng = LatLng(latitude, longitude)
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-        map?.addMarker(MarkerOptions().position(homeLatLng))
+        val defaultLocation = LatLng(latitude, longitude)
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, zoomLevel))
+        map?.addMarker(
+            marker(
+                defaultLocation,
+                requireContext().getString(R.string.googleplex),
+                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+            )
+        )
+
         map?.uiSettings?.isZoomControlsEnabled = true
 
         map?.let {
@@ -94,6 +99,17 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         enableMyLocation()
+    }
+
+    private fun marker(
+        location: LatLng,
+        title: String?,
+        icon: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker()
+    ): MarkerOptions {
+        return MarkerOptions()
+            .position(location)
+            .title(title)
+            .icon(icon)
     }
 
     private fun setMapStyle(map: GoogleMap) {
@@ -109,7 +125,7 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun validateUbication() {
+    private fun validateLocation() {
         if ((ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
