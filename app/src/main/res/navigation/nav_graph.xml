@@ -1,28 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reminderListFragment">
+    app:startDestination="@id/MainFragment">
 
     <fragment
-        android:id="@+id/reminderListFragment"
+        android:id="@+id/MainFragment"
+        android:name="com.udacity.location.reminder.main.MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_MainFragment_to_ReminderListFragment"
+            app:destination="@id/ReminderListFragment"
+            app:enterAnim="@anim/anim_right_in"
+            app:exitAnim="@anim/anim_left_out"
+            app:popEnterAnim="@anim/anim_left_in"
+            app:popExitAnim="@anim/anim_right_out"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ReminderListFragment"
         android:name="com.udacity.location.reminder.list.ReminderListFragment"
-        android:label="ReminderListFragment">
+        android:label="ReminderListFragment"
+        tools:layout="@layout/fragment_reminders">
         <action
             android:id="@+id/to_save_reminder"
-            app:destination="@id/saveReminderFragment" />
+            app:destination="@id/saveReminderFragment"
+            app:enterAnim="@anim/anim_right_in"
+            app:exitAnim="@anim/anim_left_out"
+            app:popEnterAnim="@anim/anim_left_in"
+            app:popExitAnim="@anim/anim_right_out" />
+        <action
+            android:id="@+id/action_ReminderListFragment_to_MainFragment"
+            app:destination="@id/MainFragment"
+            app:enterAnim="@anim/anim_right_in"
+            app:exitAnim="@anim/anim_left_out"
+            app:popEnterAnim="@anim/anim_left_in"
+            app:popExitAnim="@anim/anim_right_out"
+            app:popUpTo="@id/ReminderListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.udacity.location.reminder.RemindersActivity"
-        android:label="MainActivity" />
+
     <fragment
         android:id="@+id/saveReminderFragment"
         android:name="com.udacity.location.reminder.save.SaveReminderFragment"
         android:label="Add Reminder">
         <action
             android:id="@+id/action_saveReminderFragment_to_reminderListFragment"
-            app:destination="@id/reminderListFragment" />
+            app:destination="@id/ReminderListFragment" />
         <action
             android:id="@+id/action_saveReminderFragment_to_selectLocationFragment"
             app:destination="@id/selectLocationFragment" />
@@ -33,3 +60,24 @@
         android:label="Select Location" />
 
 </navigation>
+
+    <!--<fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.udacity.location.reminder.main.MainFragment"
+        tools:layout="@layout/fragment_first"
+        android:label="@string/first_fragment_label">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.udacity.location.reminder.login.LoginFragment"
+        tools:layout="@layout/fragment_second"
+        android:label="@string/second_fragment_label">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>-->
