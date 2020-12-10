@@ -1,19 +1,22 @@
 package com.udacity.location.reminder.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class MapLocationFragment : BaseMapFragment() {
+class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
@@ -42,6 +45,12 @@ class MapLocationFragment : BaseMapFragment() {
         onLocationSelected()
 
         return binding.root
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        super.onMapReady(googleMap)
+
+        map?.setOnPoiClickListener(this)
     }
 
     private fun onLocationSelected() {
@@ -86,6 +95,17 @@ class MapLocationFragment : BaseMapFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onPoiClick(poi: PointOfInterest?) {
+        Log.i("z- poi", "true")
+        val poiMarker = map?.addMarker(
+            marker(
+                poi?.latLng!!,
+                poi.name!!
+            )
+        )
+        poiMarker?.showInfoWindow()
     }
 
 }

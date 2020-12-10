@@ -22,6 +22,7 @@ import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.util.Constant
 import com.udacity.location.reminder.util.GpsUtil
+import kotlin.random.Random
 
 abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
 
@@ -80,10 +81,9 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
 
         val latitude = 37.422160
         val longitude = -122.084270
-        val zoomLevel = 15f
 
         val defaultLocation = LatLng(latitude, longitude)
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, zoomLevel))
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, Constant.MAP_ZOOM))
         map?.addMarker(
             marker(
                 defaultLocation,
@@ -94,17 +94,16 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
 
         map?.uiSettings?.isZoomControlsEnabled = true
 
-        map?.let {
-            setMapStyle(it)
-        }
-
+        setMapStyle()
         enableMyLocation()
     }
 
-    private fun marker(
+    fun marker(
         location: LatLng,
         title: String?,
-        icon: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker()
+        icon: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker(
+            Random.nextInt(360).toFloat()
+        )
     ): MarkerOptions {
         return MarkerOptions()
             .position(location)
@@ -112,9 +111,9 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
             .icon(icon)
     }
 
-    private fun setMapStyle(map: GoogleMap) {
+    private fun setMapStyle() {
         try {
-            map.setMapStyle(
+            map?.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     requireContext(),
                     R.raw.map_style
@@ -140,7 +139,7 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
 
     fun moveCamera(latLng: LatLng) {
         map?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        map?.animateCamera(CameraUpdateFactory.zoomTo(15f))
+        map?.animateCamera(CameraUpdateFactory.zoomTo(Constant.MAP_ZOOM))
     }
 
     private fun validatePermission() {
