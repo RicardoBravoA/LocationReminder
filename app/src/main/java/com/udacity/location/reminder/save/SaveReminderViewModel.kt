@@ -65,6 +65,10 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         _validateTitle.value = true
     }
 
+    fun validateDescriptionWatcher() {
+        _validateDescription.value = true
+    }
+
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */

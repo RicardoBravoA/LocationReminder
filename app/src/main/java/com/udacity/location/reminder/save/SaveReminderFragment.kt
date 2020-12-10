@@ -70,6 +70,7 @@ class SaveReminderFragment : BaseFragment() {
             }
         })
 
+        //Validate error messages
         viewModel.validateTitle.observe(viewLifecycleOwner, { isValid ->
             if (!isValid) {
                 binding.titleTextInputLayout.showErrorMessageInputLayout(
@@ -82,6 +83,21 @@ class SaveReminderFragment : BaseFragment() {
             onChanged = { _, _, _, _ ->
                 binding.titleTextInputLayout.validateErrorInputLayout()
                 viewModel.validateTitleWatcher()
+            }
+        ))
+
+        viewModel.validateDescription.observe(viewLifecycleOwner, { isValid ->
+            if (!isValid) {
+                binding.descriptionTextInputLayout.showErrorMessageInputLayout(
+                    getString(R.string.reminder_description_error)
+                )
+            }
+        })
+
+        binding.descriptionEditText.addTextChangedListener(CustomTextWatcher(
+            onChanged = { _, _, _, _ ->
+                binding.descriptionTextInputLayout.validateErrorInputLayout()
+                viewModel.validateDescriptionWatcher()
             }
         ))
 
