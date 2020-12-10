@@ -1,19 +1,19 @@
 package com.udacity.location.reminder.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
+import com.udacity.location.reminder.util.showAlertDialog
 import org.koin.android.ext.android.inject
 
 class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
@@ -21,6 +21,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentMapLocationBinding
+    private var poi: PointOfInterest? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,14 +37,6 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
-//        TODO: zoom to the user location after taking his permission
-//        TODO: put a marker to location that the user selected
-
-
-//        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
-
         return binding.root
     }
 
@@ -51,12 +44,6 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
         super.onMapReady(googleMap)
 
         map?.setOnPoiClickListener(this)
-    }
-
-    private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
     }
 
     override fun locationCallback(): LocationCallback = object : LocationCallback() {
@@ -94,11 +81,14 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
             map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
+        android.R.id.home -> {
+            back()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
     override fun onPoiClick(poi: PointOfInterest?) {
-        Log.i("z- poi", "true")
         val poiMarker = map?.addMarker(
             marker(
                 poi?.latLng!!,
@@ -106,6 +96,24 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
             )
         )
         poiMarker?.showInfoWindow()
+        this.poi = poi
+
+        requireContext().showAlertDialog(
+            requireContext().getString(R.string.want_poi), ::positiveClick, ::negativeClick
+        )
+    }
+
+    private fun positiveClick() {
+        viewModel.selectedPOI.value = poi
+        back()
+    }
+
+    private fun negativeClick() {
+        poi = null
+    }
+
+    private fun back() {
+        findNavController().popBackStack()
     }
 
 }

@@ -2,11 +2,14 @@ package com.udacity.location.reminder.util
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.AlertDialog
+import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.base.BaseRecyclerViewAdapter
 
 fun <T> RecyclerView.setup(
@@ -51,4 +54,23 @@ fun View.fadeOut() {
             this@fadeOut.visibility = View.GONE
         }
     })
+}
+
+fun Context.showAlertDialog(message: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+    val builder = AlertDialog.Builder(this)
+    builder
+        .setMessage(message)
+        .setCancelable(false)
+        .setPositiveButton(android.R.string.ok) { _, _ ->
+            positiveClick()
+        }.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+            dialog.dismiss()
+            negativeClick()
+        }
+    val alertDialog = builder.create()
+
+
+    if (!alertDialog.isShowing) {
+        alertDialog.show()
+    }
 }
