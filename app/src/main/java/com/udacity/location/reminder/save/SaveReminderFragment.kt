@@ -50,6 +50,12 @@ class SaveReminderFragment : BaseFragment() {
             }
         })
 
+        viewModel.reminderTitle.observe(viewLifecycleOwner, { singleEvent ->
+            singleEvent?.getContentIfNotHandled()?.let {
+                binding.titleEditText.setText(it)
+            }
+        })
+
         return binding.root
     }
 
