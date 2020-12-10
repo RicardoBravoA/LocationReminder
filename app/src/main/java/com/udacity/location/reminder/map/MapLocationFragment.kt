@@ -104,7 +104,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
     }
 
     private fun positiveClick() {
-        viewModel.selectedPOI.value = poi
+        viewModel.addSelectedPOI(poi)
         back()
     }
 

@@ -1,7 +1,6 @@
 package com.udacity.location.reminder.save
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
-    //Get the view model this time as a single to be shared with the another fragment
+
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSaveReminderBinding
 
@@ -27,15 +26,9 @@ class SaveReminderFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
 
         binding.viewModel = viewModel
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
-        binding.selectLocation.setOnClickListener {
-            //            Navigate to another fragment to get the user location
+
+        binding.selectLocationTextView.setOnClickListener {
             viewModel.navigationCommand.value =
                 NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToMapLocationFragment())
         }
@@ -48,8 +41,33 @@ class SaveReminderFragment : BaseFragment() {
 //            TODO: use the user entered reminder details to:
 //             1) add a geofencing request
 //             2) save the reminder to the local db
-            Log.i("z- poi", viewModel.selectedPOI.value?.name.toString())
+
+            viewModel.validate(
+                binding.titleEditText.text.toString(),
+                binding.descriptionEditText.text.toString()
+            )
         }
+
+        // Show data
+        viewModel.selectedPOI.observe(viewLifecycleOwner, { singleEvent ->
+            singleEvent?.getContentIfNotHandled()?.let {
+                binding.selectedLocationTextView.text = it.name
+            }
+        })
+
+        viewModel.reminderTitle.observe(viewLifecycleOwner, { singleEvent ->
+            singleEvent?.getContentIfNotHandled()?.let {
+                binding.titleEditText.setText(it)
+            }
+        })
+
+        viewModel.reminderDescription.observe(viewLifecycleOwner, { singleEvent ->
+            singleEvent?.getContentIfNotHandled()?.let {
+                binding.descriptionEditText.setText(it)
+            }
+        })
+
+        return binding.root
     }
 
     override fun onDestroy() {

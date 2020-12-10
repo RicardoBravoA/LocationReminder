@@ -7,6 +7,7 @@ import com.udacity.location.reminder.data.local.RemindersLocalRepository
 import com.udacity.location.reminder.list.RemindersListViewModel
 import com.udacity.location.reminder.main.MainViewModel
 import com.udacity.location.reminder.save.SaveReminderViewModel
+import com.udacity.location.reminder.util.resources.ResourcesProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -36,7 +37,8 @@ class LocationApplication : MultiDexApplication() {
                 //This view model is declared singleton to be used across multiple fragments
                 SaveReminderViewModel(
                     get(),
-                    get() as ReminderDataSource
+                    get() as ReminderDataSource,
+                    ResourcesProvider(get())
                 )
             }
             /*single {
