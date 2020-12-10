@@ -39,8 +39,13 @@ class ReminderListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         setupRecyclerView()
+
         binding.addButton.setOnClickListener {
-            navigateToAddReminder()
+            viewModel.navigationCommand.postValue(
+                NavigationCommand.To(
+                    ReminderListFragmentDirections.toSaveReminder()
+                )
+            )
         }
     }
 
@@ -48,15 +53,6 @@ class ReminderListFragment : BaseFragment() {
         super.onResume()
         //load the reminders list on the ui
         viewModel.loadReminders()
-    }
-
-    private fun navigateToAddReminder() {
-        //use the navigationCommand live data to navigate between the fragments
-        viewModel.navigationCommand.postValue(
-            NavigationCommand.To(
-                ReminderListFragmentDirections.toSaveReminder()
-            )
-        )
     }
 
     private fun setupRecyclerView() {
