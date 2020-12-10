@@ -1,38 +1,28 @@
 package com.udacity.location.reminder.map
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.location.reminder.R
-import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
+class MapLocationFragment : BaseMapFragment() {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentMapLocationBinding
 
-    private lateinit var map: GoogleMap
-    private val REQUEST_LOCATION_PERMISSION = 1
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentMapLocationBinding.inflate(inflater)
 
         binding.lifecycleOwner = this
@@ -54,38 +44,23 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-
-        val latitude = 37.422160
-        val longitude = -122.084270
-        val zoomLevel = 15f
-
-        val homeLatLng = LatLng(latitude, longitude)
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-        map.addMarker(MarkerOptions().position(homeLatLng))
-        map.uiSettings.isZoomControlsEnabled = true
-
-        setMapStyle(map)
-        enableMyLocation()
-    }
-
     private fun onLocationSelected() {
         //        TODO: When the user confirms on the selected location,
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
     }
 
-    private fun setMapStyle(map: GoogleMap) {
-        try {
-            map.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    requireContext(),
-                    R.raw.map_style
-                )
-            )
-        } catch (e: Resources.NotFoundException) {
-            e.printStackTrace()
+    override fun locationCallback(): LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            super.onLocationResult(locationResult)
+            location = locationResult!!.locations[locationResult.locations.size - 1]
+            getData(location?.latitude.toString(), location?.longitude.toString())
+        }
+    }
+
+    private fun getData(latitude: String? = null, longitude: String? = null) {
+        if (location != null && latitude != null && longitude != null) {
+            moveCamera(LatLng(latitude.toDouble(), longitude.toDouble()))
         }
     }
 
@@ -95,51 +70,22 @@ class MapLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.normal_map -> {
-            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+            map?.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
-            map.mapType = GoogleMap.MAP_TYPE_HYBRID
+            map?.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
-            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+            map?.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
-            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+            map?.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    private fun enableMyLocation() {
-        when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) -> map.isMyLocationEnabled = true
-            else -> {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_LOCATION_PERMISSION
-                )
-            }
-        }
-
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                enableMyLocation()
-            }
-        }
     }
 
 }
