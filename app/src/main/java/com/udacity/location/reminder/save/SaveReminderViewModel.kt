@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(
     val app: Application,
-    val dataSource: ReminderDataSource,
-    val resourcesProvider: ResourcesProvider
+    private val dataSource: ReminderDataSource,
+    private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel(app) {
 
     private val _reminderTitle = MutableLiveData<SingleEvent<String?>?>()
@@ -67,7 +67,7 @@ class SaveReminderViewModel(
     /**
      * Save the reminder to the data source
      */
-    fun saveReminder(reminderData: ReminderDataItem) {
+    private fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(
@@ -89,14 +89,19 @@ class SaveReminderViewModel(
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
-    fun validateData(reminderData: ReminderDataItem): Boolean {
+    private fun validateData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
             showSnackBar.value = resourcesProvider.reminderTitleError()
             return false
         }
 
-        if (reminderData.location.isNullOrEmpty()) {
+        if (reminderData.description.isNullOrEmpty()) {
             showSnackBar.value = resourcesProvider.reminderDescriptionError()
+            return false
+        }
+
+        if (reminderData.location.isNullOrEmpty() || reminderData.latitude == null || reminderData.longitude == null) {
+            showSnackBar.value = resourcesProvider.reminderLocationError()
             return false
         }
         return true
