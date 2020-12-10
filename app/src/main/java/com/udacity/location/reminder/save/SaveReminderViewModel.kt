@@ -45,7 +45,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
-    fun validateData(title: String, description: String) {
+    fun validate(title: String, description: String) {
         val poi = _selectedPOI.value?.getContentIfNotHandled()
         val reminderDataItem = ReminderDataItem(
             title,
@@ -55,7 +55,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             poi?.latLng?.longitude
         )
 
-        if (validateEnteredData(reminderDataItem)) {
+        if (validateData(reminderDataItem)) {
             saveReminder(reminderDataItem)
         }
     }
@@ -85,7 +85,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
-    fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
+    fun validateData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
             showSnackBarInt.value = R.string.reminder_title_error
             return false
