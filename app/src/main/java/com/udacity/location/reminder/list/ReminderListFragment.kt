@@ -1,12 +1,9 @@
 package com.udacity.location.reminder.list
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.NonNull
+import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
@@ -16,7 +13,6 @@ import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import com.udacity.location.reminder.util.setTitle
 import com.udacity.location.reminder.util.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class ReminderListFragment : BaseFragment() {
 
@@ -34,7 +30,7 @@ class ReminderListFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(false)
         setTitle(getString(R.string.app_name))
 
-        binding.refreshLayout.setOnRefreshListener { viewModel.loadReminders() }
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.loadReminders() }
 
         return binding.root
     }
@@ -43,7 +39,7 @@ class ReminderListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         setupRecyclerView()
-        binding.addReminderFAB.setOnClickListener {
+        binding.addButton.setOnClickListener {
             navigateToAddReminder()
         }
     }
@@ -68,7 +64,12 @@ class ReminderListFragment : BaseFragment() {
         }
 
 //        setup the recycler view using the extension function
-        binding.reminderssRecyclerView.setup(adapter)
+        binding.reminderRecyclerView.setup(adapter)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_main, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -77,26 +78,18 @@ class ReminderListFragment : BaseFragment() {
                 AuthUI.getInstance()
                     .signOut(requireContext())
                     .addOnCompleteListener {
-                        NavigationCommand.To(
-                            ReminderListFragmentDirections.actionReminderListFragmentToMainFragment()
-                        )
+                        findNavController().navigate(ReminderListFragmentDirections.actionReminderListFragmentToMainFragment())
                     }
                     .addOnFailureListener {
                         Snackbar.make(
-                            view, requireActivity().getString(R.string.app_name),
+                            binding.swipeRefreshLayout,
+                            requireActivity().getString(R.string.app_name),
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
             }
         }
         return super.onOptionsItemSelected(item)
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-//        display logout as menu item
-        inflater.inflate(R.menu.menu_main, menu)
     }
 
 }
