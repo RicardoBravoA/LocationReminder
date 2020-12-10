@@ -7,6 +7,7 @@ import androidx.annotation.NonNull
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
@@ -75,7 +76,17 @@ class ReminderListFragment : BaseFragment() {
             R.id.logout -> {
                 AuthUI.getInstance()
                     .signOut(requireContext())
-                    .addOnCompleteListener {  }
+                    .addOnCompleteListener {
+                        NavigationCommand.To(
+                            ReminderListFragmentDirections.actionReminderListFragmentToMainFragment()
+                        )
+                    }
+                    .addOnFailureListener {
+                        Snackbar.make(
+                            view, requireActivity().getString(R.string.app_name),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
             }
         }
         return super.onOptionsItemSelected(item)
