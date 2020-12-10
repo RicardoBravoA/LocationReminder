@@ -49,10 +49,8 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         // Show data
-        viewModel.selectedPOI.observe(viewLifecycleOwner, { singleEvent ->
-            singleEvent?.getContentIfNotHandled()?.let {
-                binding.selectedLocationTextView.text = it.name
-            }
+        viewModel.selectedPOI.observe(viewLifecycleOwner, {
+            binding.selectedLocationTextView.text = it?.name
         })
 
         viewModel.reminderTitle.observe(viewLifecycleOwner, { singleEvent ->
