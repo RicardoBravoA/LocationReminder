@@ -12,10 +12,14 @@ import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.list.ReminderDataItem
 import com.udacity.location.reminder.util.SingleEvent
+import com.udacity.location.reminder.util.resources.ResourcesProvider
 import kotlinx.coroutines.launch
 
-class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
-    BaseViewModel(app) {
+class SaveReminderViewModel(
+    val app: Application,
+    val dataSource: ReminderDataSource,
+    val resourcesProvider: ResourcesProvider
+) : BaseViewModel(app) {
 
     private val _reminderTitle = MutableLiveData<SingleEvent<String?>?>()
     val reminderTitle: LiveData<SingleEvent<String?>?>
@@ -87,12 +91,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
      */
     fun validateData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
-            showSnackBarInt.value = R.string.reminder_title_error
+            showSnackBar.value = resourcesProvider.reminderTitleError()
             return false
         }
 
         if (reminderData.location.isNullOrEmpty()) {
-            showSnackBarInt.value = R.string.reminder_description_error
+            showSnackBar.value = resourcesProvider.reminderDescriptionError()
             return false
         }
         return true
