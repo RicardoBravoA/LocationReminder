@@ -13,32 +13,57 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:padding="@dimen/margin_normal">
 
-        <EditText
-            android:id="@+id/title_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/title_text_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/reminder_title"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/description_edit_text"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/title_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reminder_title"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description_text_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:hint="@string/reminder_desc"
-            android:lines="10"
+            android:layout_marginTop="@dimen/margin_4"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/title_text_input_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:hint="@string/reminder_desc"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine"
+                android:lines="10" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/select_location_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -47,7 +72,7 @@
             android:textColor="@color/black"
             app:drawableStartCompat="@drawable/ic_location"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/description_text_input_layout" />
 
         <TextView
             android:id="@+id/selected_location_text_view"
