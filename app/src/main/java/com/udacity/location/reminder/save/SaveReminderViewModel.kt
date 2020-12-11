@@ -1,6 +1,7 @@
 package com.udacity.location.reminder.save
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,12 +30,12 @@ class SaveReminderViewModel(
     val reminderDescription: LiveData<SingleEvent<String?>?>
         get() = _reminderDescription
 
-    private val _selectedPOI = MutableLiveData<SingleEvent<PointOfInterest?>?>()
-    val selectedPOI: LiveData<SingleEvent<PointOfInterest?>?>
+    private val _selectedPOI = MutableLiveData<PointOfInterest?>()
+    val selectedPOI: LiveData<PointOfInterest?>
         get() = _selectedPOI
 
     fun addSelectedPOI(poi: PointOfInterest?) {
-        _selectedPOI.value = SingleEvent(poi)
+        _selectedPOI.value = poi
     }
 
     /**
@@ -50,7 +51,7 @@ class SaveReminderViewModel(
      * Validate the entered data then saves the reminder data to the DataSource
      */
     fun validate(title: String, description: String) {
-        val poi = _selectedPOI.value?.getContentIfNotHandled()
+        val poi = _selectedPOI.value
         val reminderDataItem = ReminderDataItem(
             title,
             description,
@@ -99,6 +100,8 @@ class SaveReminderViewModel(
             showSnackBar.value = resourcesProvider.reminderDescriptionError()
             return false
         }
+
+        Log.i("z- reminderData", reminderData.toString())
 
         if (reminderData.location.isNullOrEmpty() || reminderData.latitude == null || reminderData.longitude == null) {
             showSnackBar.value = resourcesProvider.reminderLocationError()

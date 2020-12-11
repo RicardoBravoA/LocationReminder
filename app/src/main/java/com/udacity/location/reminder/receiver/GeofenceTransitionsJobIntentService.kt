@@ -1,4 +1,4 @@
-package com.udacity.location.reminder.geofence
+package com.udacity.location.reminder.receiver
 
 import android.content.Context
 import android.content.Intent
@@ -39,7 +39,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
     //TODO: get the request id of the current geofence
     private fun sendNotification(triggeringGeofences: List<Geofence>) {
-        val requestId = ""
+        /*val requestId = ""
 
         //Get the local repository instance
         val remindersLocalRepository: RemindersLocalRepository by inject()
@@ -50,7 +50,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
             if (result is ResultType.Success<ReminderEntity>) {
                 val reminder = result.data
                 //send a notification to the user with the reminder details
-                com.udacity.location.reminder.util.sendNotification(
+                com.udacity.location.reminder.util.notification.sendNotification(
                     this@GeofenceTransitionsJobIntentService, ReminderDataItem(
                         reminder.title,
                         reminder.description,
@@ -61,7 +61,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
                     )
                 )
             }
-        }
+        }*/
     }
 
 }
