@@ -6,15 +6,21 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
+import com.udacity.location.reminder.BuildConfig
 import com.udacity.location.reminder.R
+import com.udacity.location.reminder.databinding.ActivityMainBinding
 import com.udacity.location.reminder.receiver.GeofenceBroadcastReceiver
 import com.udacity.location.reminder.util.Constant
 import com.udacity.location.reminder.util.notification.createChannel
@@ -23,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
 
     private val geofencePendingIntent: PendingIntent by lazy {
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
@@ -41,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         createChannel(this)
 
@@ -87,8 +96,8 @@ class MainActivity : AppCompatActivity() {
                     PackageManager.PERMISSION_DENIED)
         ) {
             // Permission denied.
-            /*Snackbar.make(
-                binding.linear,
+            Snackbar.make(
+                binding.contentMain.linearParent,
                 R.string.permission_denied_explanation, Snackbar.LENGTH_INDEFINITE
             )
                 .setAction(R.string.settings) {
@@ -98,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                         data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     })
-                }.show()*/
+                }.show()
         } else {
             checkDeviceLocationSettingsAndStartGeofence()
         }
@@ -143,12 +152,12 @@ class MainActivity : AppCompatActivity() {
                     sendEx.printStackTrace()
                 }
             } else {
-                /*Snackbar.make(
-                    binding.linear,
+                Snackbar.make(
+                    binding.contentMain.linearParent,
                     R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
                 ).setAction(android.R.string.ok) {
                     checkDeviceLocationSettingsAndStartGeofence()
-                }.show()*/
+                }.show()
             }
         }
         locationSettingsResponseTask.addOnCompleteListener {
