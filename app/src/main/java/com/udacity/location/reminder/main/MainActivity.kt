@@ -19,6 +19,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.location.reminder.BuildConfig
 import com.udacity.location.reminder.R
+import com.udacity.location.reminder.common.GeofenceViewModel
 import com.udacity.location.reminder.databinding.ActivityMainBinding
 import com.udacity.location.reminder.receiver.GeofenceBroadcastReceiver
 import com.udacity.location.reminder.util.Constant
@@ -27,7 +28,7 @@ import com.udacity.location.reminder.util.notification.createChannel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var geofencingClient: GeofencingClient
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: GeofenceViewModel
     private lateinit var binding: ActivityMainBinding
 
     private val geofencePendingIntent: PendingIntent by lazy {
@@ -41,12 +42,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
-
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
+
+        viewModel = ViewModelProvider(this).get(GeofenceViewModel::class.java)
+
 
         createChannel(this)
 
