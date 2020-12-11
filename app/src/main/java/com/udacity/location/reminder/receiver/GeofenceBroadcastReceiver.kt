@@ -40,16 +40,14 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                     }
                 }
 
-                val reminderDataItem: ReminderDataItem? = ReminderDataItem(
-                    "Computer History Museum",
-                    "Description",
-                    "Computer History Museum",
-                    37.414827,
-                    -122.077320
-                )
+                val foundIndex = Constant.LANDMARK_DATA.indexOfFirst {
+                    it.id == fenceId
+                }
+
+                val reminderDataItem: ReminderDataItem? = Constant.LANDMARK_DATA[foundIndex]
 
                 // Unknown Geofences aren't helpful to us
-                if (reminderDataItem == null) {
+                if (-1 == foundIndex) {
                     Log.e(TAG, "Unknown Geofence: Abort Mission")
                     return
                 }
@@ -60,7 +58,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 ) as NotificationManager
 
                 notificationManager.sendNotification(
-                    context, reminderDataItem
+                    context, reminderDataItem!!
                 )
             }
         }

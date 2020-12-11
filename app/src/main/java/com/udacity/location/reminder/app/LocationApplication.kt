@@ -6,6 +6,7 @@ import com.udacity.location.reminder.data.local.LocalDB
 import com.udacity.location.reminder.data.local.RemindersLocalRepository
 import com.udacity.location.reminder.list.RemindersListViewModel
 import com.udacity.location.reminder.main.MainViewModel
+import com.udacity.location.reminder.main.OtherViewModel
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.resources.ResourcesProvider
 import org.koin.android.ext.koin.androidContext
@@ -31,6 +32,9 @@ class LocationApplication : MultiDexApplication() {
                     get(),
                     get() as ReminderDataSource
                 )
+            }
+            viewModel {
+                OtherViewModel(get())
             }
             //Declare singleton definitions to be later injected using by inject()
             single {

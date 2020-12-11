@@ -9,7 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.udacity.location.reminder.R
-import com.udacity.location.reminder.ReminderDescriptionActivity
+import com.udacity.location.reminder.description.DescriptionActivity
 import com.udacity.location.reminder.list.ReminderDataItem
 
 fun createChannel(context: Context) {
@@ -36,11 +36,11 @@ fun createChannel(context: Context) {
 }
 
 fun NotificationManager.sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
-    val intent = ReminderDescriptionActivity.newIntent(context.applicationContext, reminderDataItem)
+    val intent = DescriptionActivity.newIntent(context.applicationContext, reminderDataItem)
 
     //create a pending intent that opens ReminderDescriptionActivity when the user clicks on the notification
     val stackBuilder = TaskStackBuilder.create(context)
-        .addParentStack(ReminderDescriptionActivity::class.java)
+        .addParentStack(DescriptionActivity::class.java)
         .addNextIntent(intent)
 
     val notificationPendingIntent = stackBuilder

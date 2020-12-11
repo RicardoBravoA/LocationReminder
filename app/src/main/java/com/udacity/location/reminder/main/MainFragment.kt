@@ -17,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : BaseFragment() {
 
-    override val viewModel: MainViewModel by viewModel()
+    override val viewModel: OtherViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
