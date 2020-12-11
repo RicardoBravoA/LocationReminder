@@ -5,7 +5,7 @@ import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.local.LocalDB
 import com.udacity.location.reminder.data.local.RemindersLocalRepository
 import com.udacity.location.reminder.list.RemindersListViewModel
-import com.udacity.location.reminder.main.MainViewModel
+import com.udacity.location.reminder.common.GeofenceViewModel
 import com.udacity.location.reminder.main.OtherViewModel
 import com.udacity.location.reminder.save.SaveReminderViewModel
 import com.udacity.location.reminder.util.resources.ResourcesProvider
@@ -25,13 +25,7 @@ class LocationApplication : MultiDexApplication() {
         val myModule = module {
             //Declare a ViewModel - be later inject into Fragment with dedicated injector using by viewModel()
             viewModel {
-                MainViewModel(get())
-            }
-            viewModel {
-                RemindersListViewModel(
-                    get(),
-                    get() as ReminderDataSource
-                )
+                GeofenceViewModel(get())
             }
             viewModel {
                 OtherViewModel(get())
@@ -45,12 +39,12 @@ class LocationApplication : MultiDexApplication() {
                     ResourcesProvider(get())
                 )
             }
-            /*single {
-                //This view model is declared singleton to be used across multiple fragments
-                MainViewModel(
-                    get()
+            single {
+                RemindersListViewModel(
+                    get(),
+                    get() as ReminderDataSource
                 )
-            }*/
+            }
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(this@LocationApplication) }
         }
