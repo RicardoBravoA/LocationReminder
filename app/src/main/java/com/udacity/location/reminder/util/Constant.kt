@@ -1,6 +1,5 @@
 package com.udacity.location.reminder.util
 
-import com.udacity.location.reminder.list.ReminderDataItem
 import java.util.concurrent.TimeUnit
 
 internal object Constant {
@@ -24,7 +23,7 @@ internal object Constant {
     const val HINT_INDEX_KEY = "hintIndex"
     const val GEOFENCE_INDEX_KEY = "geofenceIndex"
 
-    val LANDMARK_DATA = arrayOf(
+    /*val LANDMARK_DATA = arrayOf(
         ReminderDataItem(
             "Title",
             "Description",
@@ -34,6 +33,6 @@ internal object Constant {
         )
     )
 
-    val NUM_LANDMARKS = LANDMARK_DATA.size
+    val NUM_LANDMARKS = LANDMARK_DATA.size*/
 
 }

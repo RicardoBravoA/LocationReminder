@@ -9,25 +9,33 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.location.reminder.BuildConfig
 import com.udacity.location.reminder.R
+import com.udacity.location.reminder.data.ReminderDataSource
+import com.udacity.location.reminder.data.dto.ReminderEntity
+import com.udacity.location.reminder.data.dto.ResultType
 import com.udacity.location.reminder.receiver.GeofenceBroadcastReceiver
 import com.udacity.location.reminder.util.Constant
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 abstract class GeofenceActivity : AppCompatActivity() {
 
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var viewModel: GeofenceViewModel
-
     abstract fun viewParent(): View
+    private val dataSource: ReminderDataSource by inject()
 
     private val geofencePendingIntent: PendingIntent by lazy {
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
@@ -43,6 +51,11 @@ abstract class GeofenceActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(GeofenceViewModel::class.java)
         geofencingClient = LocationServices.getGeofencingClient(this)
+
+        viewModel.viewModelScope.launch {
+            Log.i("z- data", dataSource.getReminders().toString())
+        }
+
     }
 
     override fun onStart() {
@@ -144,7 +157,9 @@ abstract class GeofenceActivity : AppCompatActivity() {
         }
         locationSettingsResponseTask.addOnCompleteListener {
             if (it.isSuccessful) {
-                addGeofenceForClue()
+                GlobalScope.launch {
+                    addGeofenceForClue()
+                }
             }
         }
     }
@@ -191,44 +206,62 @@ abstract class GeofenceActivity : AppCompatActivity() {
         )
     }
 
-    private fun addGeofenceForClue() {
+    suspend fun addGeofenceForClue() {
+        Log.i("z- addGeofence", "4")
         if (viewModel.geofenceIsActive()) return
-        val currentGeofenceIndex = viewModel.nextGeofenceIndex()
 
-        if (currentGeofenceIndex >= Constant.NUM_LANDMARKS) {
-            removeGeofences()
-            viewModel.geofenceActivated()
-            return
+        Log.i("z- addGeofence", "5")
+        Log.i("z- addGeofence 6", dataSource.getReminders().toString())
+
+        var data: List<ReminderEntity>? = null
+        when (val reminders = dataSource.getReminders()) {
+            is ResultType.Success -> {
+                data = reminders.data
+            }
+            is ResultType.Error -> Log.i("z- error", "error getting data")
         }
-        val currentGeofenceData = Constant.LANDMARK_DATA[currentGeofenceIndex]
 
-        val geofence = Geofence.Builder()
-            .setRequestId(currentGeofenceData.id)
-            .setCircularRegion(
-                currentGeofenceData.latitude!!.toDouble(),
-                currentGeofenceData.longitude!!.toDouble(),
-                Constant.GEOFENCE_RADIUS_IN_METERS
-            ).setExpirationDuration(Constant.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-            .build()
+        Log.i("z- addGeofence data", data.toString())
 
-        val geofencingRequest = GeofencingRequest.Builder()
-            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            .addGeofence(geofence)
-            .build()
+        data?.let {
+            removeGeofences()
+//            viewModel.geofenceActivated()
+        }
 
-        geofencingClient.removeGeofences(geofencePendingIntent)?.run {
-            addOnCompleteListener {
-                if (ActivityCompat.checkSelfPermission(
-                        baseContext,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return@addOnCompleteListener
-                }
-                geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
+        data?.forEach {
+            Log.i("z- geofence", "foreach")
+            val geofence = Geofence.Builder()
+                .setRequestId(it.id)
+                .setCircularRegion(
+                    it.latitude!!.toDouble(),
+                    it.longitude!!.toDouble(),
+                    Constant.GEOFENCE_RADIUS_IN_METERS
+                ).setExpirationDuration(Constant.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .build()
+            Log.i("z- geofence", "geofence")
+
+            val geofencingRequest = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofence(geofence)
+                .build()
+
+            Log.i("z- geofence", "geofencingRequest")
+
+            Log.i("z- dataaaaaaa", it.toString())
+
+            if (ActivityCompat.checkSelfPermission(
+                    baseContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+                ?.run {
                     addOnSuccessListener {
-                        viewModel.geofenceActivated()
+//                        viewModel.geofenceActivated()
+                        Log.i("z- geofence", "active")
                     }
                     addOnFailureListener {
                         Toast.makeText(
@@ -237,14 +270,16 @@ abstract class GeofenceActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-            }
         }
+
+
     }
 
     private fun removeGeofences() {
         if (!foregroundAndBackgroundLocationPermissionApproved()) {
             return
         }
+        Log.i("z- geofence", "remove")
         geofencingClient.removeGeofences(geofencePendingIntent)?.run {
             addOnFailureListener {
                 Toast.makeText(

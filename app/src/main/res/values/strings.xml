@@ -37,6 +37,7 @@
     <string name="geofences_not_added">Problem in adding geofences.</string>
     <string name="welcome">Welcome</string>
     <string name="googleplex">Googleplex</string>
+    <string name="error_getting_reminders">Error getting reminders</string>
     <string name="want_poi">Do you want to add this point of interest?</string>
 
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDhoLTzaJFRRHB8vu329noA1AeiaHX-oOI</string>
