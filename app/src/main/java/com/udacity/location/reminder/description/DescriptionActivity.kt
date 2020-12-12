@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.location.reminder.R
-import com.udacity.location.reminder.databinding.ActivityReminderDescriptionBinding
+import com.udacity.location.reminder.databinding.ActivityDescriptionBinding
 import com.udacity.location.reminder.list.ReminderDataItem
 import com.udacity.location.reminder.util.Constant
 import kotlin.random.Random
@@ -21,12 +21,13 @@ import kotlin.random.Random
 class DescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var map: GoogleMap? = null
-    private lateinit var binding: ActivityReminderDescriptionBinding
+    private lateinit var binding: ActivityDescriptionBinding
     private var reminderDataItem: ReminderDataItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_reminder_description)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_description)
+        setSupportActionBar(binding.toolbar)
         binding.lifecycleOwner = this
 
         reminderDataItem = intent?.extras?.getParcelable(Constant.DATA)
@@ -36,8 +37,8 @@ class DescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
         reminderDataItem?.let {
-            binding.titleTextView.text = it.title
-            binding.descriptionTextView.text = it.description
+            binding.contentDescription.titleTextView.text = it.title
+            binding.contentDescription.descriptionTextView.text = it.description
         }
 
     }
