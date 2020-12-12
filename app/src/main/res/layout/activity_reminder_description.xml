@@ -10,25 +10,24 @@
             type="com.udacity.location.reminder.list.ReminderDataItem" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/linear"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".locationreminders.ReminderDescriptionActivity">
-        <!--TODO: add the design of the reminder details-->
+        android:padding="@dimen/margin_normal"
+        tools:context=".description.DescriptionActivity">
 
         <TextView
+            android:id="@+id/title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Reminder Details"
-            android:textSize="@dimen/text_size_large"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
