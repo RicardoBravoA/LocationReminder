@@ -61,7 +61,7 @@ class KoinGeofenceBroadcastReceiver : KoinComponent {
                     }
 
                     val foundIndex = data?.indexOfFirst {
-                        it.id == fenceId
+                        it.id == fenceId.toInt()
                     }
 
                     val reminderEntity = foundIndex?.let { data?.get(it) }

@@ -231,7 +231,7 @@ abstract class GeofenceActivity : AppCompatActivity() {
         data?.forEach {
             Log.i("z- geofence", "foreach")
             val geofence = Geofence.Builder()
-                .setRequestId(it.id)
+                .setRequestId(it.id.toString())
                 .setCircularRegion(
                     it.latitude!!.toDouble(),
                     it.longitude!!.toDouble(),
