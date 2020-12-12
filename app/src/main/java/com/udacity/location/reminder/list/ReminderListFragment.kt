@@ -1,7 +1,6 @@
 package com.udacity.location.reminder.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -35,7 +34,11 @@ class ReminderListFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(false)
         setTitle(getString(R.string.app_name))
 
-        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.loadReminders() }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = true
+            viewModel.loadReminders()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
 
         return binding.root
     }
@@ -53,11 +56,8 @@ class ReminderListFragment : BaseFragment() {
         }
 
         viewModel.addGeofence.observe(viewLifecycleOwner, {
-            Log.i("z- addGeofence", "1")
             it?.getContentIfNotHandled()?.let { value ->
-                Log.i("z- addGeofence", "2")
                 if (value) {
-                    Log.i("z- addGeofence", "3")
                     viewModel.viewModelScope.launch {
                         (requireActivity() as GeofenceActivity).addGeofenceForClue()
                     }
@@ -66,11 +66,11 @@ class ReminderListFragment : BaseFragment() {
         })
     }
 
-    /*override fun onResume() {
+    override fun onResume() {
         super.onResume()
         //load the reminders list on the ui
         viewModel.loadReminders()
-    }*/
+    }
 
     private fun setupRecyclerView() {
         val adapter = RemindersListAdapter {
