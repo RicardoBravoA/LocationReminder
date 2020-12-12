@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,9 +62,7 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
     private fun activateGPS() {
         GpsUtil(requireContext()).turnOnGPS(object : GpsUtil.GpsListener {
             override fun onGpsStatus(isGPSEnable: Boolean) {
-                if (isGPSEnable) {
-                    validateLocation()
-                }
+                validateLocation()
             }
         })
     }
@@ -132,12 +131,14 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         ) {
             map?.isMyLocationEnabled = true
         }
-        if (location != null) {
-            moveCamera(LatLng(location!!.latitude, location!!.longitude))
-        }
+        location?.let {
+            Log.i("z- location", "1")
+            moveCamera(LatLng(it.latitude, it.longitude))
+        } ?: Log.i("z- location", "2")
     }
 
     fun moveCamera(latLng: LatLng) {
+        Log.i("z- moveCamera", "${latLng.latitude} - ${latLng.longitude}")
         map?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
         map?.animateCamera(CameraUpdateFactory.zoomTo(Constant.MAP_ZOOM))
     }
@@ -179,7 +180,10 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) -> map?.isMyLocationEnabled = true
+            ) -> {
+                activateGPS()
+                map?.isMyLocationEnabled = true
+            }
             else -> {
                 requestPermission()
             }

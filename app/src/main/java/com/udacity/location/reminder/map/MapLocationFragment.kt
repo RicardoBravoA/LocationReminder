@@ -49,14 +49,14 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
     override fun locationCallback(): LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             super.onLocationResult(locationResult)
-            location = locationResult!!.locations[locationResult.locations.size - 1]
-            getData(location?.latitude.toString(), location?.longitude.toString())
-        }
-    }
 
-    private fun getData(latitude: String? = null, longitude: String? = null) {
-        if (location != null && latitude != null && longitude != null) {
-            moveCamera(LatLng(latitude.toDouble(), longitude.toDouble()))
+            locationResult?.let { result ->
+                location = result.locations[locationResult.locations.size - 1]
+
+                location?.let {
+                    moveCamera(LatLng(it.latitude, it.longitude))
+                }
+            }
         }
     }
 

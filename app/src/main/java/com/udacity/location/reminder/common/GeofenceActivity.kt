@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -203,14 +202,11 @@ abstract class GeofenceActivity : AppCompatActivity() {
     suspend fun addGeofenceForClue() {
         if (viewModel.geofenceIsActive()) return
 
-        Log.i("z- addGeofence 6", dataSource.getReminders().toString())
-
         var data: List<ReminderEntity>? = null
         when (val reminders = dataSource.getReminders()) {
             is ResultType.Success -> {
                 data = reminders.data
             }
-            is ResultType.Error -> Log.i("z- error", "error getting data")
         }
 
         data?.let {
@@ -242,10 +238,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
             }
             geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
                 ?.run {
-                    addOnSuccessListener {
-//                        viewModel.geofenceActivated()
-                        Log.i("z- geofence", "active")
-                    }
                     addOnFailureListener {
                         Toast.makeText(
                             this@GeofenceActivity, R.string.geofences_not_added,
