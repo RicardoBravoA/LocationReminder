@@ -22,4 +22,14 @@
     <style name="Theme.LocationReminder.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.LocationReminder.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Title">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Description">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
 </resources>

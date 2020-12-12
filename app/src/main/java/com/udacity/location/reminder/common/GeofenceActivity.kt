@@ -215,7 +215,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
 
         data?.let {
             removeGeofences()
-//            viewModel.geofenceActivated()
         }
 
         data?.forEach {
@@ -255,7 +254,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
                     }
                 }
         }
-
 
     }
 

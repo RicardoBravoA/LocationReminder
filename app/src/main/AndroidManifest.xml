@@ -32,6 +32,7 @@
 
         <activity
             android:name=".description.DescriptionActivity"
+            android:label="@string/app_name"
             android:theme="@style/Theme.LocationReminder.NoActionBar" />
 
         <receiver
@@ -39,10 +40,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <service
-            android:name=".receiver.GeofenceTransitionsJobIntentService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>
