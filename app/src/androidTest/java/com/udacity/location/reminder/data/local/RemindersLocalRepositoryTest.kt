@@ -78,4 +78,15 @@ class RemindersLocalRepositoryTest {
         assertThat(response.data.size, `is`(0))
     }
 
+    @Test
+    fun validateInsertReminder() = runBlocking {
+
+        remindersLocalRepository.saveReminder(reminderEntity)
+
+        val response = remindersLocalRepository.getReminders()
+
+        response as ResultType.Success
+        assertThat(response.data.size, `is`(1))
+    }
+
 }
