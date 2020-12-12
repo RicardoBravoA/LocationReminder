@@ -69,4 +69,13 @@ class RemindersLocalRepositoryTest {
         assertThat(response.data.longitude, `is`(reminderEntity.longitude))
     }
 
+    @Test
+    fun validateNoData() = runBlocking {
+
+        val response = remindersLocalRepository.getReminders()
+
+        response as ResultType.Success
+        assertThat(response.data.size, `is`(0))
+    }
+
 }
