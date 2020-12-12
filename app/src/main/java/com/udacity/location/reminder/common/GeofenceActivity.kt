@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -51,11 +50,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(GeofenceViewModel::class.java)
         geofencingClient = LocationServices.getGeofencingClient(this)
-
-        viewModel.viewModelScope.launch {
-            Log.i("z- data", dataSource.getReminders().toString())
-        }
-
     }
 
     override fun onStart() {
@@ -207,10 +201,8 @@ abstract class GeofenceActivity : AppCompatActivity() {
     }
 
     suspend fun addGeofenceForClue() {
-        Log.i("z- addGeofence", "4")
         if (viewModel.geofenceIsActive()) return
 
-        Log.i("z- addGeofence", "5")
         Log.i("z- addGeofence 6", dataSource.getReminders().toString())
 
         var data: List<ReminderEntity>? = null
@@ -221,15 +213,12 @@ abstract class GeofenceActivity : AppCompatActivity() {
             is ResultType.Error -> Log.i("z- error", "error getting data")
         }
 
-        Log.i("z- addGeofence data", data.toString())
-
         data?.let {
             removeGeofences()
 //            viewModel.geofenceActivated()
         }
 
         data?.forEach {
-            Log.i("z- geofence", "foreach")
             val geofence = Geofence.Builder()
                 .setRequestId(it.id.toString())
                 .setCircularRegion(
@@ -239,16 +228,11 @@ abstract class GeofenceActivity : AppCompatActivity() {
                 ).setExpirationDuration(Constant.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build()
-            Log.i("z- geofence", "geofence")
 
             val geofencingRequest = GeofencingRequest.Builder()
                 .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                 .addGeofence(geofence)
                 .build()
-
-            Log.i("z- geofence", "geofencingRequest")
-
-            Log.i("z- dataaaaaaa", it.toString())
 
             if (ActivityCompat.checkSelfPermission(
                     baseContext,
@@ -279,7 +263,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
         if (!foregroundAndBackgroundLocationPermissionApproved()) {
             return
         }
-        Log.i("z- geofence", "remove")
         geofencingClient.removeGeofences(geofencePendingIntent)?.run {
             addOnFailureListener {
                 Toast.makeText(

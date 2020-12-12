@@ -1,7 +1,6 @@
 package com.udacity.location.reminder.list
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -23,6 +22,10 @@ class RemindersListViewModel(
     val addGeofence: LiveData<SingleEvent<Boolean>>
         get() = _addGeofence
 
+    init {
+        showLoading.value = false
+    }
+
     /**
      * Get all the reminders from the DataSource and add them to the remindersList to be shown on the UI,
      * or show error if any
@@ -30,9 +33,9 @@ class RemindersListViewModel(
     fun loadReminders() {
         showLoading.value = true
         viewModelScope.launch {
-            //interacting with the dataSource has to be through a coroutine
             val result = dataSource.getReminders()
-            showLoading.postValue(false)
+            showLoading.value = false
+
             when (result) {
                 is ResultType.Success<*> -> {
                     val dataList = ArrayList<ReminderDataItem>()
@@ -48,22 +51,22 @@ class RemindersListViewModel(
                         )
                     })
                     remindersList.value = dataList
-                    Log.i("z- reminders", dataList.toString())
                     _addGeofence.value = SingleEvent(true)
                 }
-                is ResultType.Error ->
+                is ResultType.Error -> {
                     showSnackBar.value = result.message!!
+                }
             }
-
-            //check if no data has to be shown
-            invalidateShowNoData()
         }
+        invalidateShowNoData()
     }
 
     /**
      * Inform the user that there's not any data if the remindersList is empty
      */
+
     private fun invalidateShowNoData() {
         showNoData.value = remindersList.value == null || remindersList.value!!.isEmpty()
+        showLoading.value = false
     }
 }
