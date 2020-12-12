@@ -43,4 +43,14 @@ object BindingAdapters {
             }
         }
     }
+
+    @BindingAdapter("android:visible")
+    @JvmStatic
+    fun View.setVisibility(visible: Boolean? = true) {
+        if (visible == true) {
+            fadeIn()
+        } else {
+            fadeOut()
+        }
+    }
 }

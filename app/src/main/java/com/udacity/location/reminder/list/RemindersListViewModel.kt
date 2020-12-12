@@ -22,21 +22,13 @@ class RemindersListViewModel(
     val addGeofence: LiveData<SingleEvent<Boolean>>
         get() = _addGeofence
 
-    init {
-        showLoading.value = false
-    }
-
     /**
      * Get all the reminders from the DataSource and add them to the remindersList to be shown on the UI,
      * or show error if any
      */
     fun loadReminders() {
-        showLoading.value = true
         viewModelScope.launch {
-            val result = dataSource.getReminders()
-            showLoading.value = false
-
-            when (result) {
+            when (val result = dataSource.getReminders()) {
                 is ResultType.Success<*> -> {
                     val dataList = ArrayList<ReminderDataItem>()
                     dataList.addAll((result.data as List<ReminderEntity>).map { reminder ->
@@ -57,6 +49,7 @@ class RemindersListViewModel(
                     showSnackBar.value = result.message!!
                 }
             }
+            invalidateShowNoData()
         }
         invalidateShowNoData()
     }
@@ -67,6 +60,5 @@ class RemindersListViewModel(
 
     private fun invalidateShowNoData() {
         showNoData.value = remindersList.value.isNullOrEmpty()
-        showLoading.value = false
     }
 }
