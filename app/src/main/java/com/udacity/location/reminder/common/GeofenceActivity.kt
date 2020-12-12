@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +30,6 @@ import org.koin.android.ext.android.inject
 abstract class GeofenceActivity : AppCompatActivity() {
 
     private lateinit var geofencingClient: GeofencingClient
-    private lateinit var viewModel: GeofenceViewModel
     abstract fun viewParent(): View
     private val dataSource: ReminderDataSource by inject()
 
@@ -46,8 +44,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(GeofenceViewModel::class.java)
         geofencingClient = LocationServices.getGeofencingClient(this)
     }
 
@@ -68,7 +64,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
         val extras = intent?.extras
         if (extras != null) {
             if (extras.containsKey(Constant.EXTRA_GEOFENCE_INDEX)) {
-                viewModel.updateHint(extras.getInt(Constant.EXTRA_GEOFENCE_INDEX))
                 checkPermissionsAndStartGeofencing()
             }
         }
@@ -109,7 +104,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
     }
 
     private fun checkPermissionsAndStartGeofencing() {
-        if (viewModel.geofenceIsActive()) return
 
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             checkDeviceLocationSettingsAndStartGeofence()
@@ -200,8 +194,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
     }
 
     suspend fun addGeofenceForClue() {
-        if (viewModel.geofenceIsActive()) return
-
         var data: List<ReminderEntity>? = null
         when (val reminders = dataSource.getReminders()) {
             is ResultType.Success -> {

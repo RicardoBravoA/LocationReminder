@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.map
 import com.udacity.location.reminder.base.BaseViewModel
 
-class OtherViewModel(app: Application) : BaseViewModel(app) {
+class MainViewModel(app: Application) : BaseViewModel(app) {
 
     val authenticationState = FirebaseUserLiveData().map { user ->
         user?.let {

@@ -19,21 +19,6 @@ internal object Constant {
     const val LOCATION_PERMISSION_INDEX = 0
     const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
     internal const val ACTION_GEOFENCE_EVENT =
-        "ReminderDescriptionActivity.locationReminder.action.ACTION_GEOFENCE_EVENT"
-
-    const val HINT_INDEX_KEY = "hintIndex"
-    const val GEOFENCE_INDEX_KEY = "geofenceIndex"
-
-    /*val LANDMARK_DATA = arrayOf(
-        ReminderDataItem(
-            "Title",
-            "Description",
-            "Museum History",
-            37.414827,
-            -122.077320
-        )
-    )
-
-    val NUM_LANDMARKS = LANDMARK_DATA.size*/
+        "DescriptionActivity.locationReminder.action.ACTION_GEOFENCE_EVENT"
 
 }
