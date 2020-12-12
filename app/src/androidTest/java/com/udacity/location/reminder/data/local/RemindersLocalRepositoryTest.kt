@@ -12,10 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
@@ -87,6 +84,18 @@ class RemindersLocalRepositoryTest {
 
         response as ResultType.Success
         assertThat(response.data.size, `is`(1))
+    }
+
+    @Test
+    fun validateAndNotGetReminderById() = runBlocking {
+
+        remindersLocalRepository.saveReminder(reminderEntity)
+
+        val response = remindersLocalRepository.getReminder("999")
+
+        response as ResultType.Error
+        Assert.assertNotNull(response.message)
+
     }
 
 }
