@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.base.BaseRecyclerViewAdapter
 
 fun <T> RecyclerView.setup(

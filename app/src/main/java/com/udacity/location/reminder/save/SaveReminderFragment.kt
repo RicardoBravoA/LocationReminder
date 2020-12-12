@@ -38,10 +38,6 @@ class SaveReminderFragment : BaseFragment() {
             val description = viewModel.reminderDescription
             val poi = viewModel.selectedPOI.value
 
-//            TODO: use the user entered reminder details to:
-//             1) add a geofencing request
-//             2) save the reminder to the local db
-
             viewModel.validate(
                 binding.titleEditText.text.toString(),
                 binding.descriptionEditText.text.toString()
