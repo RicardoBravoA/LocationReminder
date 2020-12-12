@@ -26,10 +26,6 @@ class KoinGeofenceBroadcastReceiver : KoinComponent {
 
     fun onReceive(context: Context, intent: Intent) {
 
-        runBlocking {
-            Log.i("z- dataBroadCast", dataSource.getReminders().toString())
-        }
-
         if (intent.action == Constant.ACTION_GEOFENCE_EVENT) {
             val geofencingEvent = GeofencingEvent.fromIntent(intent)
 
