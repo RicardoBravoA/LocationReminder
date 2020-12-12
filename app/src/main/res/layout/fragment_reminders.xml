@@ -35,6 +35,7 @@
                 android:id="@+id/no_data_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
                 android:gravity="center"
                 android:text="@string/no_data"
                 android:textSize="@dimen/text_size_large"
