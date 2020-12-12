@@ -1,7 +1,6 @@
 package com.udacity.location.reminder.save
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -100,8 +99,6 @@ class SaveReminderViewModel(
             showSnackBar.value = resourcesProvider.reminderDescriptionError()
             return false
         }
-
-        Log.i("z- reminderData", reminderData.toString())
 
         if (reminderData.location.isNullOrEmpty() || reminderData.latitude == null || reminderData.longitude == null) {
             showSnackBar.value = resourcesProvider.reminderLocationError()

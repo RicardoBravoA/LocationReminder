@@ -1,17 +1,21 @@
 package com.udacity.location.reminder.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
+import com.udacity.location.reminder.common.GeofenceActivity
 import com.udacity.location.reminder.databinding.FragmentRemindersBinding
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import com.udacity.location.reminder.util.setTitle
 import com.udacity.location.reminder.util.setup
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReminderListFragment : BaseFragment() {
@@ -47,13 +51,26 @@ class ReminderListFragment : BaseFragment() {
                 )
             )
         }
+
+        viewModel.addGeofence.observe(viewLifecycleOwner, {
+            Log.i("z- addGeofence", "1")
+            it?.getContentIfNotHandled()?.let { value ->
+                Log.i("z- addGeofence", "2")
+                if (value) {
+                    Log.i("z- addGeofence", "3")
+                    viewModel.viewModelScope.launch {
+                        (requireActivity() as GeofenceActivity).addGeofenceForClue()
+                    }
+                }
+            }
+        })
     }
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
         //load the reminders list on the ui
         viewModel.loadReminders()
-    }
+    }*/
 
     private fun setupRecyclerView() {
         val adapter = RemindersListAdapter {
@@ -79,7 +96,7 @@ class ReminderListFragment : BaseFragment() {
                     .addOnFailureListener {
                         Snackbar.make(
                             binding.swipeRefreshLayout,
-                            requireActivity().getString(R.string.app_name),
+                            requireActivity().getString(R.string.error_getting_reminders),
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
