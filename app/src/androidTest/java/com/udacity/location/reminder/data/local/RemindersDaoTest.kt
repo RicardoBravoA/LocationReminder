@@ -11,10 +11,8 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
+import org.junit.Assert.assertNull
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
@@ -70,6 +68,14 @@ class RemindersDaoTest {
         val response = database.reminderDao().getReminders()
 
         assertThat(response.size, `is`(1))
+    }
+
+    @Test
+    fun validateAndNotGetReminderById() = runBlockingTest {
+        database.reminderDao().saveReminder(reminderEntity)
+
+        val response = database.reminderDao().getReminderById("999")
+        assertNull(response)
     }
 
 }

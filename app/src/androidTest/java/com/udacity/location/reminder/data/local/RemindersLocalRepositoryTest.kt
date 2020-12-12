@@ -13,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.*
+import org.junit.Assert.assertNotNull
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
@@ -94,7 +95,7 @@ class RemindersLocalRepositoryTest {
         val response = remindersLocalRepository.getReminder("999")
 
         response as ResultType.Error
-        Assert.assertNotNull(response.message)
+        assertNotNull(response.message)
 
     }
 
