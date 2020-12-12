@@ -18,5 +18,5 @@ data class ReminderEntity(
     var longitude: Double?,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "entry_id")
-    val id: Int
+    val id: Int = 0
 )
