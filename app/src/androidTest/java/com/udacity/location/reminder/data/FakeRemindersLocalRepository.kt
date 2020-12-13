@@ -6,24 +6,27 @@ import com.udacity.location.reminder.data.dto.ResultType
 
 class FakeRemindersLocalRepository : ReminderDataSource {
 
-    var remindersList: MutableList<ReminderEntity> = mutableListOf()
+    var remindersList: LinkedHashMap<String, ReminderEntity> = LinkedHashMap()
 
     private val observableTasks = MutableLiveData<Result<List<ReminderEntity>>>()
 
     override suspend fun getReminders(): ResultType<List<ReminderEntity>> {
-        return ResultType.Success(remindersList.toList())
+        return ResultType.Success(remindersList.values.toList())
     }
 
     override suspend fun saveReminder(reminder: ReminderEntity) {
-        remindersList.add(reminder)
+        remindersList[reminder.id.toString()] = reminder
     }
 
     override suspend fun getReminder(id: String): ResultType<ReminderEntity> {
-        TODO("Not yet implemented")
+        remindersList[id]?.let {
+            return ResultType.Success(it)
+        }
+        return ResultType.Error("Could not find reminder")
     }
 
     override suspend fun deleteAllReminders() {
-        TODO("Not yet implemented")
+        remindersList.clear()
     }
 
 }
