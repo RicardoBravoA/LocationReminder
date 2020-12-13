@@ -1,16 +1,21 @@
 package com.udacity.location.reminder.data
 
+import androidx.lifecycle.MutableLiveData
 import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.data.dto.ResultType
 
-class FakeRemindersLocalRepository: ReminderDataSource {
+class FakeRemindersLocalRepository : ReminderDataSource {
+
+    var remindersList: MutableList<ReminderEntity> = mutableListOf()
+
+    private val observableTasks = MutableLiveData<Result<List<ReminderEntity>>>()
 
     override suspend fun getReminders(): ResultType<List<ReminderEntity>> {
-        TODO("Not yet implemented")
+        return ResultType.Success(remindersList.toList())
     }
 
     override suspend fun saveReminder(reminder: ReminderEntity) {
-        TODO("Not yet implemented")
+        remindersList.add(reminder)
     }
 
     override suspend fun getReminder(id: String): ResultType<ReminderEntity> {
