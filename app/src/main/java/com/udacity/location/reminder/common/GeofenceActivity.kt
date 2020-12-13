@@ -145,7 +145,7 @@ abstract class GeofenceActivity : AppCompatActivity() {
         locationSettingsResponseTask.addOnCompleteListener {
             if (it.isSuccessful) {
                 GlobalScope.launch {
-                    addGeofenceForClue()
+                    addGeofences()
                 }
             }
         }
@@ -193,7 +193,7 @@ abstract class GeofenceActivity : AppCompatActivity() {
         )
     }
 
-    suspend fun addGeofenceForClue() {
+    suspend fun addGeofences() {
         var data: List<ReminderEntity>? = null
         when (val reminders = dataSource.getReminders()) {
             is ResultType.Success -> {
@@ -238,7 +238,6 @@ abstract class GeofenceActivity : AppCompatActivity() {
                     }
                 }
         }
-
     }
 
     private fun removeGeofences() {

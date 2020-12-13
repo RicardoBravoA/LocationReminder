@@ -1,14 +1,12 @@
 package com.udacity.location.reminder.list
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.udacity.location.reminder.base.BaseViewModel
 import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.data.dto.ResultType
-import com.udacity.location.reminder.util.SingleEvent
 import kotlinx.coroutines.launch
 
 class RemindersListViewModel(
@@ -17,10 +15,6 @@ class RemindersListViewModel(
 ) : BaseViewModel(app) {
     // list that holds the reminder data to be displayed on the UI
     val remindersList = MutableLiveData<List<ReminderDataItem>>()
-
-    private val _addGeofence = MutableLiveData<SingleEvent<Boolean>>()
-    val addGeofence: LiveData<SingleEvent<Boolean>>
-        get() = _addGeofence
 
     /**
      * Get all the reminders from the DataSource and add them to the remindersList to be shown on the UI,
@@ -43,7 +37,6 @@ class RemindersListViewModel(
                         )
                     })
                     remindersList.value = dataList
-                    _addGeofence.value = SingleEvent(true)
                 }
                 is ResultType.Error -> {
                     showSnackBar.value = result.message!!

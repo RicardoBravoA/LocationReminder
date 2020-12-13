@@ -12,6 +12,7 @@ import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.list.ReminderDataItem
 import com.udacity.location.reminder.util.SingleEvent
 import com.udacity.location.reminder.util.resources.ResourcesProvider
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(
@@ -20,17 +21,13 @@ class SaveReminderViewModel(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel(app) {
 
-    private val _reminderTitle = MutableLiveData<SingleEvent<String?>?>()
-    val reminderTitle: LiveData<SingleEvent<String?>?>
-        get() = _reminderTitle
-
-    private val _reminderDescription = MutableLiveData<SingleEvent<String?>?>()
-    val reminderDescription: LiveData<SingleEvent<String?>?>
-        get() = _reminderDescription
-
     private val _selectedPOI = MutableLiveData<PointOfInterest?>()
     val selectedPOI: LiveData<PointOfInterest?>
         get() = _selectedPOI
+
+    private val _addGeofence = MutableLiveData<SingleEvent<Boolean>>()
+    val addGeofence: LiveData<SingleEvent<Boolean>>
+        get() = _addGeofence
 
     fun addSelectedPOI(poi: PointOfInterest?) {
         _selectedPOI.value = poi
@@ -40,8 +37,6 @@ class SaveReminderViewModel(
      * Clear the live data objects to start fresh next time the view model gets called
      */
     fun onClear() {
-        _reminderTitle.value = null
-        _reminderDescription.value = null
         _selectedPOI.value = null
     }
 
@@ -68,19 +63,26 @@ class SaveReminderViewModel(
      */
     private fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
+        val reminderEntity = ReminderEntity(
+            reminderData.title,
+            reminderData.description,
+            reminderData.location,
+            reminderData.latitude,
+            reminderData.longitude,
+            reminderData.id
+        )
         viewModelScope.launch {
-            dataSource.saveReminder(
-                ReminderEntity(
-                    reminderData.title,
-                    reminderData.description,
-                    reminderData.location,
-                    reminderData.latitude,
-                    reminderData.longitude,
-                    reminderData.id
-                )
-            )
-            showLoading.value = false
-            navigationCommand.value = NavigationCommand.Back
+            try {
+                coroutineScope {
+                    dataSource.saveReminder(reminderEntity)
+                    _addGeofence.postValue(SingleEvent(true))
+                    showLoading.value = false
+                    navigationCommand.value = NavigationCommand.Back
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         }
     }
 

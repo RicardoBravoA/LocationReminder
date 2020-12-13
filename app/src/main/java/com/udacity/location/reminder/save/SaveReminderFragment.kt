@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.viewModelScope
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.base.BaseFragment
 import com.udacity.location.reminder.base.NavigationCommand
+import com.udacity.location.reminder.common.GeofenceActivity
 import com.udacity.location.reminder.databinding.FragmentSaveReminderBinding
 import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
@@ -34,14 +37,6 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
-            val title = viewModel.reminderTitle.value
-            val description = viewModel.reminderDescription
-            val poi = viewModel.selectedPOI.value
-
-//            TODO: use the user entered reminder details to:
-//             1) add a geofencing request
-//             2) save the reminder to the local db
-
             viewModel.validate(
                 binding.titleEditText.text.toString(),
                 binding.descriptionEditText.text.toString()
@@ -53,15 +48,11 @@ class SaveReminderFragment : BaseFragment() {
             binding.selectedLocationTextView.text = it?.name
         })
 
-        viewModel.reminderTitle.observe(viewLifecycleOwner, { singleEvent ->
-            singleEvent?.getContentIfNotHandled()?.let {
-                binding.titleEditText.setText(it)
-            }
-        })
-
-        viewModel.reminderDescription.observe(viewLifecycleOwner, { singleEvent ->
-            singleEvent?.getContentIfNotHandled()?.let {
-                binding.descriptionEditText.setText(it)
+        viewModel.addGeofence.observe(viewLifecycleOwner, {
+            it?.getContentIfNotHandled()?.let {
+                viewModel.viewModelScope.launch {
+                    (requireActivity() as GeofenceActivity).addGeofences()
+                }
             }
         })
 
