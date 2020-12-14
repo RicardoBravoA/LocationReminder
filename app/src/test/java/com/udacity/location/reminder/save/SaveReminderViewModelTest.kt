@@ -17,6 +17,8 @@ import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.koin.dsl.koinApplication
@@ -55,7 +57,7 @@ class SaveReminderViewModelTest : KoinTest {
     }
 
     @Test
-    fun loadReminderTest() = runBlocking {
+    fun validateSelectPOITest() = runBlocking {
         viewModel.addSelectedPOI(
             PointOfInterest(
                 LatLng(40.7536, -73.9831),
@@ -65,6 +67,26 @@ class SaveReminderViewModelTest : KoinTest {
         )
         val value = viewModel.selectedPOI.getOrAwaitValue()
         MatcherAssert.assertThat(value, CoreMatchers.not(CoreMatchers.nullValue()))
+    }
+
+    @Test
+    fun validateShowLoadingTest() = runBlocking {
+        mainCoroutineRule.pauseDispatcher()
+
+        viewModel.addSelectedPOI(
+            PointOfInterest(
+                LatLng(40.7536, -73.9831),
+                "Googleplex",
+                "Googleplex"
+            )
+        )
+        viewModel.validate("Title", "Description")
+
+        assertThat(viewModel.showLoading.getOrAwaitValue(), `is`(true))
+
+        mainCoroutineRule.resumeDispatcher()
+
+        assertThat(viewModel.showLoading.getOrAwaitValue(), `is`(false))
     }
 
 }
