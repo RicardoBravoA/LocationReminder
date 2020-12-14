@@ -40,7 +40,7 @@
     <string name="error_getting_reminders">Error getting reminders</string>
     <string name="want_poi">Do you want to add this point of interest?</string>
 
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDhoLTzaJFRRHB8vu329noA1AeiaHX-oOI</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDzJikDU6I55TCu-ZLPcdbgGwi_u66QKs0</string>
 
     <!-- Error strings -->
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
