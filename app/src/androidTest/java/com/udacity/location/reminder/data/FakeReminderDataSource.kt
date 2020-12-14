@@ -21,7 +21,7 @@ class FakeReminderDataSource : ReminderDataSource {
     }
 
     override suspend fun saveReminder(reminder: ReminderEntity) {
-        TODO("Not yet implemented")
+        tasksServiceData[reminder.id.toString()] = reminder
     }
 
     override suspend fun getReminder(id: String): ResultType<ReminderEntity> {
