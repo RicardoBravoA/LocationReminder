@@ -1,4 +1,4 @@
-package com.udacity.location.reminder
+package com.udacity.location.reminder.description
 
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
@@ -8,7 +8,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.udacity.location.reminder.description.DescriptionActivity
+import com.udacity.location.reminder.R
 import com.udacity.location.reminder.list.ReminderDataItem
 import com.udacity.location.reminder.util.Constant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +16,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
