@@ -25,7 +25,13 @@ class FakeReminderDataSource : ReminderDataSource {
     }
 
     override suspend fun getReminder(id: String): ResultType<ReminderEntity> {
-        TODO("Not yet implemented")
+        if (shouldReturnError) {
+            return ResultType.Error("Test exception")
+        }
+        tasksServiceData[id]?.let {
+            return ResultType.Success(it)
+        }
+        return ResultType.Error("Could not find task"))
     }
 
     override suspend fun deleteAllReminders() {
