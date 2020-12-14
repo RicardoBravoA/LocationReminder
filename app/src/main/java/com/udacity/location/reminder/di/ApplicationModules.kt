@@ -24,7 +24,7 @@ val myModule = module {
             get() as ReminderDataSource
         )
     }
-    viewModel {
+    single {
         SaveReminderViewModel(
             get(),
             get() as ReminderDataSource,
