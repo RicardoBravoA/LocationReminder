@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
+            android:padding="@dimen/margin_4"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/select_location_text_view"
             app:layout_constraintEnd_toEndOf="parent"
