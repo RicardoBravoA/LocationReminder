@@ -22,7 +22,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.mockito.Mockito.*
 import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
@@ -60,7 +60,7 @@ class ReminderListFragmentTest : KoinTest {
 
     @Test
     fun validateDataInRecyclerView() {
-        runBlockingTest {
+        runBlocking {
             reminderDataSource.saveReminder(reminderEntity)
         }
 

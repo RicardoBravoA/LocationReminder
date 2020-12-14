@@ -3,7 +3,7 @@ package com.udacity.location.reminder.util.resources
 import android.content.Context
 import com.udacity.location.reminder.R
 
-class ResourcesProvider(private val context: Context) : ResourcesInterface {
+open class ResourcesProvider(private val context: Context) : ResourcesInterface {
 
     override fun reminderTitleError() = context.getString(R.string.reminder_title_error)
 

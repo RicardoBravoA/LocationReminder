@@ -4,7 +4,7 @@ import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.data.dto.ResultType
 
-class FakeRemindersLocalRepository(private var remindersList: LinkedHashMap<String, ReminderEntity>) :
+class FakeRemindersLocalRepositoryTest(private var remindersList: LinkedHashMap<String, ReminderEntity>) :
     ReminderDataSource {
 
     override suspend fun getReminders(): ResultType<List<ReminderEntity>> {

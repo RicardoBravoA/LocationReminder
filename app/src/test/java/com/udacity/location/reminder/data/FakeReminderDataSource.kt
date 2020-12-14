@@ -31,7 +31,7 @@ class FakeReminderDataSource : ReminderDataSource {
         data[id]?.let {
             return ResultType.Success(it)
         }
-        return ResultType.Error("Could not find task"))
+        return ResultType.Error("Could not find task")
     }
 
     override suspend fun deleteAllReminders() {
