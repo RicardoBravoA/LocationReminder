@@ -1,11 +1,11 @@
-package com.udacity.location.reminder.data
+package com.udacity.location.reminder.data.local
 
+import com.udacity.location.reminder.data.ReminderDataSource
 import com.udacity.location.reminder.data.dto.ReminderEntity
 import com.udacity.location.reminder.data.dto.ResultType
 
-class FakeRemindersLocalRepository : ReminderDataSource {
-
-    var remindersList: LinkedHashMap<String, ReminderEntity> = LinkedHashMap()
+class FakeRemindersLocalRepository(private var remindersList: LinkedHashMap<String, ReminderEntity>) :
+    ReminderDataSource {
 
     override suspend fun getReminders(): ResultType<List<ReminderEntity>> {
         return ResultType.Success(remindersList.values.toList())
