@@ -14,7 +14,10 @@ class FakeReminderDataSource : ReminderDataSource {
     }
 
     override suspend fun getReminders(): ResultType<List<ReminderEntity>> {
-        TODO("Not yet implemented")
+        if (shouldReturnError) {
+            return ResultType.Error("Test exception")
+        }
+        return ResultType.Success(tasksServiceData.values.toList())
     }
 
     override suspend fun saveReminder(reminder: ReminderEntity) {
