@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.PointOfInterest
+import com.google.android.gms.maps.model.Marker
 import com.udacity.location.reminder.base.BaseViewModel
 import com.udacity.location.reminder.base.NavigationCommand
 import com.udacity.location.reminder.data.ReminderDataSource
@@ -21,36 +21,36 @@ class SaveReminderViewModel(
     private val resourcesProvider: ResourcesProvider
 ) : BaseViewModel(app) {
 
-    private val _selectedPOI = MutableLiveData<PointOfInterest?>()
-    val selectedPOI: LiveData<PointOfInterest?>
-        get() = _selectedPOI
+    private val _selectedMarker = MutableLiveData<Marker?>()
+    val selectedMarker: LiveData<Marker?>
+        get() = _selectedMarker
 
     private val _addGeofence = MutableLiveData<SingleEvent<Boolean>>()
     val addGeofence: LiveData<SingleEvent<Boolean>>
         get() = _addGeofence
 
-    fun addSelectedPOI(poi: PointOfInterest?) {
-        _selectedPOI.value = poi
+    fun addSelectedMarker(marker: Marker) {
+        _selectedMarker.value = marker
     }
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
     fun onClear() {
-        _selectedPOI.value = null
+        _selectedMarker.value = null
     }
 
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
     fun validate(title: String, description: String) {
-        val poi = _selectedPOI.value
+        val marker = _selectedMarker.value
         val reminderDataItem = ReminderDataItem(
             title,
             description,
-            poi?.name,
-            poi?.latLng?.latitude,
-            poi?.latLng?.longitude
+            marker?.title,
+            marker?.position?.latitude,
+            marker?.position?.longitude
         )
 
         if (validateData(reminderDataItem)) {

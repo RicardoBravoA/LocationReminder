@@ -55,7 +55,7 @@ fun View.fadeOut() {
     })
 }
 
-fun Context.showAlertDialog(message: String, key: String, positiveClick: (key: String) -> Unit) {
+fun Context.showAlertDialog(message: String, key: Int, positiveClick: (key: Int) -> Unit) {
     val builder = AlertDialog.Builder(this)
     builder
         .setMessage(message)
