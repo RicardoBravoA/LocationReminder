@@ -2,6 +2,7 @@ package com.udacity.location.reminder.description
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.ActivityDescriptionBinding
@@ -63,6 +65,20 @@ class DescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         map?.uiSettings?.isZoomControlsEnabled = true
+        setMapStyle()
+    }
+
+    private fun setMapStyle() {
+        try {
+            map?.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this,
+                    R.raw.map_style
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            e.printStackTrace()
+        }
     }
 
     companion object {
