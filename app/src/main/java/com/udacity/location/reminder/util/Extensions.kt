@@ -55,16 +55,15 @@ fun View.fadeOut() {
     })
 }
 
-fun Context.showAlertDialog(message: String, positiveClick: () -> Unit, negativeClick: () -> Unit) {
+fun Context.showAlertDialog(message: String, key: String, positiveClick: (key: String) -> Unit) {
     val builder = AlertDialog.Builder(this)
     builder
         .setMessage(message)
         .setCancelable(false)
         .setPositiveButton(android.R.string.ok) { _, _ ->
-            positiveClick()
+            positiveClick(key)
         }.setNegativeButton(android.R.string.cancel) { dialog, _ ->
             dialog.dismiss()
-            negativeClick()
         }
     val alertDialog = builder.create()
 
