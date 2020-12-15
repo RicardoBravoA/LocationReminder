@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.location.reminder.R
 import com.udacity.location.reminder.databinding.FragmentMapLocationBinding
@@ -17,7 +18,7 @@ import com.udacity.location.reminder.util.showAlertDialog
 import org.koin.android.ext.android.inject
 
 class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
-    GoogleMap.OnMapLongClickListener {
+    GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
@@ -46,6 +47,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
 
         map?.setOnPoiClickListener(this)
         map?.setOnMapLongClickListener(this)
+        map?.setOnMarkerClickListener(this)
     }
 
     override fun locationCallback(): LocationCallback = object : LocationCallback() {
@@ -105,6 +107,18 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
         )
         poiList[poi.latLng.toString()] = poi
         confirm(poi)
+    }
+
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        marker?.let {
+            val poi = poiList[it.position.toString()]
+            requireContext().showAlertDialog(
+                requireContext().getString(R.string.want_poi),
+                poi?.latLng.toString(),
+                ::positiveClick
+            )
+        }
+        return false
     }
 
     private fun confirm(poi: PointOfInterest?) {
