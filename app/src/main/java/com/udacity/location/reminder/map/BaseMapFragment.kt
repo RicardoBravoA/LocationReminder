@@ -58,7 +58,6 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         locationCallback()
     }
 
-
     private fun activateGPS() {
         GpsUtil(requireContext()).turnOnGPS(object : GpsUtil.GpsListener {
             override fun onGpsStatus(isGPSEnable: Boolean) {
@@ -188,7 +187,6 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
                 requestPermission()
             }
         }
-
     }
 
     override fun onRequestPermissionsResult(
