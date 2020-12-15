@@ -16,7 +16,8 @@ import com.udacity.location.reminder.util.setDisplayHomeAsUpEnabled
 import com.udacity.location.reminder.util.showAlertDialog
 import org.koin.android.ext.android.inject
 
-class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
+class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
+    GoogleMap.OnMapLongClickListener {
 
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
@@ -44,6 +45,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
         super.onMapReady(googleMap)
 
         map?.setOnPoiClickListener(this)
+        map?.setOnMapLongClickListener(this)
     }
 
     override fun locationCallback(): LocationCallback = object : LocationCallback() {
@@ -89,6 +91,21 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
     }
 
     override fun onPoiClick(poi: PointOfInterest?) {
+        this.poi = poi
+        confirm(poi)
+    }
+
+    override fun onMapLongClick(latLng: LatLng?) {
+        val poi = PointOfInterest(
+            latLng,
+            getString(R.string.custom_location),
+            getString(R.string.custom_location)
+        )
+        this.poi = poi
+        confirm(poi)
+    }
+
+    private fun confirm(poi: PointOfInterest?) {
         val poiMarker = map?.addMarker(
             marker(
                 poi?.latLng!!,
@@ -96,7 +113,6 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener {
             )
         )
         poiMarker?.showInfoWindow()
-        this.poi = poi
 
         requireContext().showAlertDialog(
             requireContext().getString(R.string.want_poi), ::positiveClick, ::negativeClick

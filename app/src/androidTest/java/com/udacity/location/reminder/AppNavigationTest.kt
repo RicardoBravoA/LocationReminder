@@ -32,6 +32,8 @@ class AppNavigationTest {
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
 
+
+    // For users without login
     @Test
     fun loginScreen_clickOnLoginButton_OpensFirebaseUI() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
