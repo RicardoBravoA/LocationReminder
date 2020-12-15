@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
     abstract fun locationCallback(): LocationCallback
     var location: Location? = null
     var map: GoogleMap? = null
+    internal var markerList: MutableList<Marker> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,13 +81,17 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         val longitude = -122.084270
 
         val defaultLocation = LatLng(latitude, longitude)
+
+        val poi = PointOfInterest(
+            defaultLocation,
+            getString(R.string.googleplex),
+            getString(R.string.googleplex)
+        )
+
         map?.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, Constant.MAP_ZOOM))
-        map?.addMarker(
-            marker(
-                defaultLocation,
-                requireContext().getString(R.string.googleplex),
-                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
-            )
+        addMarker(
+            poi,
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
         )
 
         map?.uiSettings?.isZoomControlsEnabled = true
@@ -96,17 +100,24 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
         enableMyLocation()
     }
 
-    fun marker(
-        location: LatLng,
-        title: String?,
+    fun addMarker(
+        poi: PointOfInterest,
         icon: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker(
             Random.nextInt(360).toFloat()
         )
-    ): MarkerOptions {
-        return MarkerOptions()
-            .position(location)
-            .title(title)
-            .icon(icon)
+    ): Marker? {
+        val marker = map?.addMarker(
+            MarkerOptions()
+                .position(poi.latLng)
+                .title(poi.name)
+                .icon(icon)
+        )
+        marker?.apply {
+            showInfoWindow()
+            markerList.add(this)
+            tag = markerList.size - 1
+        }
+        return marker
     }
 
     private fun setMapStyle() {
@@ -131,13 +142,11 @@ abstract class BaseMapFragment : BaseFragment(), OnMapReadyCallback {
             map?.isMyLocationEnabled = true
         }
         location?.let {
-            Log.i("z- location", "1")
             moveCamera(LatLng(it.latitude, it.longitude))
-        } ?: Log.i("z- location", "2")
+        }
     }
 
     fun moveCamera(latLng: LatLng) {
-        Log.i("z- moveCamera", "${latLng.latitude} - ${latLng.longitude}")
         map?.moveCamera(CameraUpdateFactory.newLatLng(latLng))
         map?.animateCamera(CameraUpdateFactory.zoomTo(Constant.MAP_ZOOM))
     }

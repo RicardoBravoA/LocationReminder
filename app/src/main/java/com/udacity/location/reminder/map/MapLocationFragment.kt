@@ -23,7 +23,6 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentMapLocationBinding
-    private var poiList: LinkedHashMap<String, PointOfInterest> = linkedMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -94,9 +93,8 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
 
     override fun onPoiClick(poi: PointOfInterest?) {
         poi?.let {
-            poiList[poi.latLng.toString()] = poi
+            confirm(addMarker(it))
         }
-        confirm(poi)
     }
 
     override fun onMapLongClick(latLng: LatLng?) {
@@ -105,39 +103,34 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
             getString(R.string.custom_location),
             getString(R.string.custom_location)
         )
-        poiList[poi.latLng.toString()] = poi
-        confirm(poi)
+        confirm(addMarker(poi))
     }
 
     override fun onMarkerClick(marker: Marker?): Boolean {
         marker?.let {
-            val poi = poiList[it.position.toString()]
+
+            val poi = markerList[(it.tag as Int)]
+
             requireContext().showAlertDialog(
                 requireContext().getString(R.string.want_poi),
-                poi?.latLng.toString(),
+                poi.tag as Int,
                 ::positiveClick
             )
         }
         return false
     }
 
-    private fun confirm(poi: PointOfInterest?) {
-        val poiMarker = map?.addMarker(
-            marker(
-                poi?.latLng!!,
-                poi.name!!
+    private fun confirm(marker: Marker?) {
+        marker?.let {
+            requireContext().showAlertDialog(
+                requireContext().getString(R.string.want_poi), it.tag as Int, ::positiveClick
             )
-        )
-        poiMarker?.showInfoWindow()
-
-        requireContext().showAlertDialog(
-            requireContext().getString(R.string.want_poi), poi?.latLng.toString(), ::positiveClick
-        )
+        }
     }
 
-    private fun positiveClick(key: String) {
-        val poi = poiList[key]
-        viewModel.addSelectedPOI(poi)
+    private fun positiveClick(key: Int) {
+        val poi = markerList[key]
+        viewModel.addSelectedMarker(poi)
         back()
     }
 

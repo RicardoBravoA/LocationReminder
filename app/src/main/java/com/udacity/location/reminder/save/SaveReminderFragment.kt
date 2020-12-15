@@ -44,8 +44,8 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         // Show data
-        viewModel.selectedPOI.observe(viewLifecycleOwner, {
-            binding.selectedLocationTextView.text = it?.name
+        viewModel.selectedMarker.observe(viewLifecycleOwner, {
+            binding.selectedLocationTextView.text = it?.title
         })
 
         viewModel.addGeofence.observe(viewLifecycleOwner, {
