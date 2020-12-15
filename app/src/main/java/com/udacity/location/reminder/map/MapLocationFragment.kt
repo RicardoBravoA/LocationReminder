@@ -22,7 +22,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
     //Use Koin to get the view model of the SaveReminder
     override val viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentMapLocationBinding
-    private var poi: PointOfInterest? = null
+    private var poiList: LinkedHashMap<String, PointOfInterest> = linkedMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -91,7 +91,9 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
     }
 
     override fun onPoiClick(poi: PointOfInterest?) {
-        this.poi = poi
+        poi?.let {
+            poiList[poi.latLng.toString()] = poi
+        }
         confirm(poi)
     }
 
@@ -101,7 +103,7 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
             getString(R.string.custom_location),
             getString(R.string.custom_location)
         )
-        this.poi = poi
+        poiList[poi.latLng.toString()] = poi
         confirm(poi)
     }
 
@@ -115,17 +117,14 @@ class MapLocationFragment : BaseMapFragment(), GoogleMap.OnPoiClickListener,
         poiMarker?.showInfoWindow()
 
         requireContext().showAlertDialog(
-            requireContext().getString(R.string.want_poi), ::positiveClick, ::negativeClick
+            requireContext().getString(R.string.want_poi), poi?.latLng.toString(), ::positiveClick
         )
     }
 
-    private fun positiveClick() {
+    private fun positiveClick(key: String) {
+        val poi = poiList[key]
         viewModel.addSelectedPOI(poi)
         back()
-    }
-
-    private fun negativeClick() {
-        poi = null
     }
 
     private fun back() {
